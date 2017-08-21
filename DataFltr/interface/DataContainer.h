@@ -1,47 +1,65 @@
-#ifndef DATACONTAINER_HPP
-#define DATACONTAINER_HPP
+#ifndef DATACONTAINER_H
+#define DATACONTAINER_H
 
-class elContainer{
-    
+#include "FWCore/Framework/interface/EDConsumerBase.h"
+
+#include "FWCore/Framework/interface/Frameworkfwd.h"
+#include "FWCore/Framework/interface/Event.h"
+#include "FWCore/ParameterSet/interface/ParameterSet.h"
+
+#include "DataFormats/FWLite/interface/Handle.h"
+#include "DataFormats/PatCandidates/interface/Electron.h"
+#include "DataFormats/PatCandidates/interface/Muon.h"
+#include "RecoEgamma/EgammaTools/interface/EffectiveAreas.h"
+
+#include <string>
+#include <tuple>
+
+class elContainer : public edm::EDConsumerBase {
+
     public:
 
-        elContainer();
-        ~elContainer();
+        elContainer( const edm::ParameterSet& );
+        ~elContainer() {}
 
-        elContainer(const elContainer&)            = delete;
-        elContainer& operator=(const elContainer&) = delete;
+        elContainer( const elContainer& )            = delete;
+        elContainer& operator=( const elContainer& ) = delete;
+
+        std::tuple<bool, bool> getImpact() const;
+        void initHandle( const edm::Event& ) ;
+        edm::ValueMap<bool> getIDMap( const std::string& );
 
     private:
 
         const bool _pImpact;
         const bool _tImpact;
 
-        const edm::EDGetTokenT<edm::ValueMap<bool>> looseMapToken;
-        edm::Handle<edm::ValueMap<bool>> looseMapHandle;
-        const edm::EDGetTokenT<edm::ValueMap<bool>> mediumMapToken;
-        edm::Handle<edm::ValueMap<bool>> mediumMapHandle;
-        const edm::EDGetTokenT<edm::ValueMap<bool>> tightMapToken;
-        edm::Handle<edm::ValueMap<bool>> tightMapHandle;
-        const edm::EDGetTokenT<edm::ValueMap<bool>> heepMapToken;
-        edm::Handle<edm::ValueMap<bool>> heepMapHandle;
+        const edm::EDGetTokenT<edm::ValueMap<bool>> _looseMapToken;
+        edm::Handle<edm::ValueMap<bool>> _looseMapHandle;
+        const edm::EDGetTokenT<edm::ValueMap<bool>> _mediumMapToken;
+        edm::Handle<edm::ValueMap<bool>> _mediumMapHandle;
+        const edm::EDGetTokenT<edm::ValueMap<bool>> _tightMapToken;
+        edm::Handle<edm::ValueMap<bool>> _tightMapHandle;
+        const edm::EDGetTokenT<edm::ValueMap<bool>> _heepMapToken;
+        edm::Handle<edm::ValueMap<bool>> _heepMapHandle;
 
-        const edm::EDGetTokenT<edm::ValueMap<bool>> safeCutToken;
-        edm::Handle<edm::ValueMap<bool>> safecutHandle;
+        const edm::EDGetTokenT<edm::ValueMap<bool>> _safeCutToken;
+        edm::Handle<edm::ValueMap<bool>> _safecutHandle;
 };
 
-class muContainer{
+class muContainer {
 
     public:
 
-        muContainer();
-        ~muContainer();
+        muContainer( const edm::ParameterSet& );
+        ~muContainer() {}
 
-        muContainer(const muContainer&)            = delete;
-        muContainer& operator=(const muContainer&) = delete;
+        muContainer( const muContainer& )            = delete;
+        muContainer& operator=( const muContainer& ) = delete;
 
-        bool passTKIso(const pat::Muon& ,const double ) const;
-        bool passPFIso(const pat::Muon& ,const double ) const;
-    
+        bool passTKIso( const pat::Muon& , const double& ) const;
+        bool passPFIso( const pat::Muon& , const double& ) const;
+
     private:
 
         const double _tPFIso;
@@ -49,3 +67,5 @@ class muContainer{
         const double _tTKIso;
         const double _pTKIso;
 };
+
+#endif

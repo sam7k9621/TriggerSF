@@ -22,14 +22,14 @@ using namespace std;
 
 class DataFltr : public edm::stream::EDFilter<> {
     public:
-        explicit DataFltr(const edm::ParameterSet&);
+        explicit DataFltr( const edm::ParameterSet& );
         ~DataFltr();
 
-        static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
+        static void fillDescriptions( edm::ConfigurationDescriptions& descriptions );
 
     private:
-        virtual void beginStream(edm::StreamID) override;
-        virtual bool filter(edm::Event&, const edm::EventSetup&) override;
+        virtual void beginStream( edm::StreamID ) override;
+        virtual bool filter( edm::Event&, const edm::EventSetup& ) override;
         virtual void endStream() override;
         // ----------member data ---------------------------
 
@@ -49,7 +49,7 @@ class DataFltr : public edm::stream::EDFilter<> {
         const double _zmax;
         const bool   _useMC;
         const string _lepton;
-        
+
         const string _tagid;
         const string _proid;
         const double _tEtaMax;
@@ -59,31 +59,28 @@ class DataFltr : public edm::stream::EDFilter<> {
         const vector<edm::ParameterSet> _trigger;
 };
 
-DataFltr::DataFltr(const edm::ParameterSet& iConfig):
-    _musrc ( consumes<vector<pat::Muon> >(iConfig.getParameter<edm::InputTag>("musrc") ) ),
-    _elsrc ( consumes<vector<pat::Electron> >(iConfig.getParameter<edm::InputTag>("elsrc") ) ),
-    _vtxsrc  ( consumes<vector<reco::Vertex> > (iConfig.getParameter<edm::InputTag >("vtxsrc") ) ),
-    _hltInputTag (consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("HLTInputTag"))),
-    _hltObjectsInputTag (consumes<vector<pat::TriggerObjectStandAlone> >(iConfig.getParameter<edm::InputTag>("HLTObjectsInputTag"))),
-    _zmin (iConfig.getParameter   <double>("Zmassmin")),
-    _zmax (iConfig.getParameter   <double>("Zmassmax")),
-    _useMC (iConfig.getParameter<bool>("useMC")),
-    _lepton (iConfig.getParameter<string>("lepton_type")),
-    _tagid (iConfig.getParameter<string>("TagPassID")),
-    _proid (iConfig.getParameter<string>("ProbePassID")),
-    _tEtaMax (iConfig.getParameter<double>("tagEtaMax")),
-    _pEtaMax (iConfig.getParameter<double>("probeEtaMax")),
-    _tPtMin (iConfig.getParameter <double>("tagPtMin")),
-    _pPtMin (iConfig.getParameter <double>("probePtMin")),
-    _trigger (iConfig.getParameter<vector<edm::ParameterSet>>("triggerCache"))
-{
-    cout<<_zmin<<endl;
+DataFltr::DataFltr( const edm::ParameterSet& iConfig ):
+    _musrc ( consumes<vector<pat::Muon> >( iConfig.getParameter<edm::InputTag>( "musrc" ) ) ),
+    _elsrc ( consumes<vector<pat::Electron> >( iConfig.getParameter<edm::InputTag>( "elsrc" ) ) ),
+    _vtxsrc  ( consumes<vector<reco::Vertex> > ( iConfig.getParameter<edm::InputTag >( "vtxsrc" ) ) ),
+    _hltInputTag ( consumes<edm::TriggerResults>( iConfig.getParameter<edm::InputTag>( "HLTInputTag" ) ) ),
+    _hltObjectsInputTag ( consumes<vector<pat::TriggerObjectStandAlone> >( iConfig.getParameter<edm::InputTag>( "HLTObjectsInputTag" ) ) ),
+    _zmin ( iConfig.getParameter   <double>( "Zmassmin" ) ),
+    _zmax ( iConfig.getParameter   <double>( "Zmassmax" ) ),
+    _useMC ( iConfig.getParameter<bool>( "useMC" ) ),
+    _lepton ( iConfig.getParameter<string>( "lepton_type" ) ),
+    _tagid ( iConfig.getParameter<string>( "TagPassID" ) ),
+    _proid ( iConfig.getParameter<string>( "ProbePassID" ) ),
+    _tEtaMax ( iConfig.getParameter<double>( "tagEtaMax" ) ),
+    _pEtaMax ( iConfig.getParameter<double>( "probeEtaMax" ) ),
+    _tPtMin ( iConfig.getParameter <double>( "tagPtMin" ) ),
+    _pPtMin ( iConfig.getParameter <double>( "probePtMin" ) ),
+    _trigger ( iConfig.getParameter<vector<edm::ParameterSet>>( "triggerCache" ) ) {
+    cout << _zmin << endl;
 }
 
 
 DataFltr::~DataFltr() {
-    
-
 }
 
 
@@ -93,13 +90,13 @@ DataFltr::~DataFltr() {
 
 // ------------ method called on each new Event  ------------
 bool
-DataFltr::filter(edm::Event& iEvent, const edm::EventSetup& iSetup) {
+DataFltr::filter( edm::Event& iEvent, const edm::EventSetup& iSetup ) {
     return true;
 }
 
 // ------------ method called once each stream before processing any runs, lumis or events  ------------
 void
-DataFltr::beginStream(edm::StreamID) {
+DataFltr::beginStream( edm::StreamID ) {
 }
 
 // ------------ method called once each stream after processing all runs, lumis and events  ------------
@@ -141,12 +138,12 @@ DataFltr::endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
 void
-DataFltr::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+DataFltr::fillDescriptions( edm::ConfigurationDescriptions& descriptions ) {
     //The following says we do not know what parameters are allowed so do no validation
     // Please change this to state exactly what you do use, even if it is no parameters
     edm::ParameterSetDescription desc;
     desc.setUnknown();
-    descriptions.addDefault(desc);
+    descriptions.addDefault( desc );
 }
 //define this as a plug-in
-DEFINE_FWK_MODULE(DataFltr);
+DEFINE_FWK_MODULE( DataFltr );
