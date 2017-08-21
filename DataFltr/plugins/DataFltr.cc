@@ -45,10 +45,18 @@ class DataFltr : public edm::stream::EDFilter<> {
         edm::Handle < edm::TriggerResults > triggerResults;
         edm::Handle<pat::TriggerObjectStandAloneCollection> triggerObjects;
 
-        double _zmin;
-        double _zmax;
-        bool   _useMC;
-        string _lepton;
+        const double _zmin;
+        const double _zmax;
+        const bool   _useMC;
+        const string _lepton;
+        
+        const string _tagid;
+        const string _proid;
+        const double _tEtaMax;
+        const double _pEtaMax;
+        const double _tPtMin;
+        const double _pPtMin;
+        const vector<edm::ParameterSet> _trigger;
 };
 
 DataFltr::DataFltr(const edm::ParameterSet& iConfig):
@@ -60,21 +68,16 @@ DataFltr::DataFltr(const edm::ParameterSet& iConfig):
     _zmin (iConfig.getParameter   <double>("Zmassmin")),
     _zmax (iConfig.getParameter   <double>("Zmassmax")),
     _useMC (iConfig.getParameter<bool>("useMC")),
-    _lepton (iConfig.getParameter<string>("lepton_type")) 
+    _lepton (iConfig.getParameter<string>("lepton_type")),
+    _tagid (iConfig.getParameter<string>("TagPassID")),
+    _proid (iConfig.getParameter<string>("ProbePassID")),
+    _tEtaMax (iConfig.getParameter<double>("tagEtaMax")),
+    _pEtaMax (iConfig.getParameter<double>("probeEtaMax")),
+    _tPtMin (iConfig.getParameter <double>("tagPtMin")),
+    _pPtMin (iConfig.getParameter <double>("probePtMin")),
+    _trigger (iConfig.getParameter<vector<edm::ParameterSet>>("triggerCache"))
 {
-  /*  if(lepton_type ==  "electron") {*/
-        //produces<vector<pat::Electron>>("Tag");
-        //produces<vector<pat::Electron>>("Probe");
-    //}
-    //else if(lepton_type == "muon") {
-        //produces<vector<pat::Muon>>("Tag");
-        //produces<vector<pat::Muon>>("Probe");
-    /*}*/
-
-    cout<<"zmin   "<<_zmin<<endl;
-    cout<<"zmax   "<<_zmax<<endl;
-    cout<<"useMC  "<<_useMC<<endl;
-    cout<<"lepton "<<_lepton<<endl;
+    cout<<_zmin<<endl;
 }
 
 
