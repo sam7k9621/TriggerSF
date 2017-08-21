@@ -20,9 +20,9 @@ options.register('output',
     'Output label')
 
 options.register('useMC',
-    "0",
+    False,
     opts.VarParsing.multiplicity.singleton,
-    opts.VarParsing.varType.string,
+    opts.VarParsing.varType.bool,
     'Sample is mc or data')
 
 options.register('lepton',
@@ -96,14 +96,18 @@ if options.lepton == "electron":
     process.datafltr = cms.EDFilter(
             "DataFltr",
             commontool,
-            electrontool
+            electrontool,
+            lepton_type = cms.string(options.lepton),
+            useMC = cms.bool(options.useMC)  # Check whether lepton has gen level lepton and  whether tag and probe has MC truth Z parent 
             )
 
 elif options.lepton == "muon":
     process.datafltr = cms.EDFilter(
             "DataFltr",
             commontool,
-            muontool
+            muontool,
+            lepton_type = cms.string(options.lepton),
+            useMC = cms.bool(options.useMC)   # Check whether lepton has gen level lepton and  whether tag and probe has MC truth Z parent 
             )
 
 process.filterpath = cms.Path(
