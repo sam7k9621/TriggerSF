@@ -25,8 +25,8 @@ class elContainer : public edm::EDConsumerBase {
         elContainer( const elContainer& )            = delete;
         elContainer& operator=( const elContainer& ) = delete;
 
-        std::tuple<bool, bool> getImpact() const;
         void initHandle( const edm::Event& ) ;
+        std::tuple<bool, bool> getImpact() const;
         edm::ValueMap<bool> getIDMap( const std::string& );
 
     private:

@@ -12,12 +12,12 @@ elContainer::elContainer( const edm::ParameterSet & iConfig ):
     _safeCutToken  ( consumes < edm::ValueMap < bool >> ( iConfig.getParameter < edm::InputTag > ( "safeCut" ) ) ) {
 }
 
-inline tuple<bool, bool>
+tuple<bool, bool>
 elContainer::getImpact() const {
     return make_tuple( _tImpact, _pImpact );
 }
 
-inline void
+void
 elContainer::initHandle( const edm::Event& iEvent ) {
     iEvent.getByToken( _safeCutToken  , _safecutHandle  );
     iEvent.getByToken( _looseMapToken , _looseMapHandle );
@@ -26,7 +26,7 @@ elContainer::initHandle( const edm::Event& iEvent ) {
     iEvent.getByToken( _heepMapToken  , _heepMapHandle  );
 }
 
-inline edm::ValueMap<bool>
+edm::ValueMap<bool>
 elContainer::getIDMap( const string& level ) {
     if( level == "loose" ) {
         return *_looseMapHandle;

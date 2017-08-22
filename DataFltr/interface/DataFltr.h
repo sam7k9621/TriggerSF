@@ -37,7 +37,14 @@ class DataFltr : public edm::stream::EDFilter<> {
 
         // ----------electron member data ---------------------------
 
+        elContainer& elMgr( edm::ParameterSet* = 0 );
+        double delR( const pat::Electron&, const edm::Event&, const std::string& );
+        void passTrigger( pat::Electron&, const edm::Event& );
 
+        bool zParent( pat::ElectronCollection& ) const;
+        bool passKin( const pat::Electron&, const bool& ) const;
+        bool passId( const edm::Ptr<pat::Electron>&, const std::string& );
+        bool passImpact( const pat::Electron& ) const;
 
         // ----------muon member data ---------------------------
 
@@ -61,7 +68,7 @@ class DataFltr : public edm::stream::EDFilter<> {
         const edm::EDGetToken _elsrc;
         edm::Handle<std::vector<pat::Electron> > elehandle;
         const edm::EDGetTokenT<std::vector<reco::Vertex> > _vtxsrc;
-        edm::Handle<reco::VertexCollection>  vtxhandle;
+        edm::Handle<reco::VertexCollection>  _vtxhandle;
 
         const edm::EDGetToken _hltInputTag;
         const edm::EDGetToken _hltObjectsInputTag;
