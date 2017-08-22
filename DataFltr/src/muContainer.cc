@@ -2,7 +2,7 @@
 #include "math.h"
 using namespace std;
 
-muContainer::muContainer( const edm:: ParameterSet& iConfig ):
+muContainer::muContainer( const edm::ParameterSet& iConfig ):
     _tPFIso( iConfig.getParameter<double>( "TagPassPFIso" ) ),
     _pPFIso( iConfig.getParameter<double>( "ProbePassPFIso" ) ),
     _tTKIso( iConfig.getParameter<double>( "TagPassTKIso" ) ),
