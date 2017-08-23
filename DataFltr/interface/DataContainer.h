@@ -25,7 +25,7 @@ class elContainer : public edm::EDConsumerBase {
         elContainer( const elContainer& )            = delete;
         elContainer& operator=( const elContainer& ) = delete;
 
-        void initHandle( const edm::Event& ) ;
+        void initHandle( edm::Event& ) ;
         std::tuple<bool, bool> getImpact() const;
         edm::ValueMap<bool> getIDMap( const std::string& );
 
@@ -35,16 +35,14 @@ class elContainer : public edm::EDConsumerBase {
         const bool _tImpact;
 
         const edm::EDGetTokenT<edm::ValueMap<bool>> _looseMapToken;
-        edm::Handle<edm::ValueMap<bool>> _looseMapHandle;
         const edm::EDGetTokenT<edm::ValueMap<bool>> _mediumMapToken;
-        edm::Handle<edm::ValueMap<bool>> _mediumMapHandle;
         const edm::EDGetTokenT<edm::ValueMap<bool>> _tightMapToken;
-        edm::Handle<edm::ValueMap<bool>> _tightMapHandle;
         const edm::EDGetTokenT<edm::ValueMap<bool>> _heepMapToken;
+        edm::Handle<edm::ValueMap<bool>> _looseMapHandle;
+        edm::Handle<edm::ValueMap<bool>> _mediumMapHandle;
+        edm::Handle<edm::ValueMap<bool>> _tightMapHandle;
         edm::Handle<edm::ValueMap<bool>> _heepMapHandle;
 
-        const edm::EDGetTokenT<edm::ValueMap<bool>> _safeCutToken;
-        edm::Handle<edm::ValueMap<bool>> _safecutHandle;
 };
 
 class muContainer {
@@ -56,9 +54,9 @@ class muContainer {
 
         muContainer( const muContainer& )            = delete;
         muContainer& operator=( const muContainer& ) = delete;
-
-        bool passTKIso( const pat::Muon& , const double& ) const;
-        bool passPFIso( const pat::Muon& , const double& ) const;
+        
+        std::tuple<double, double> getPFIso() const;
+        std::tuple<double, double> getTKIso() const;
 
     private:
 
