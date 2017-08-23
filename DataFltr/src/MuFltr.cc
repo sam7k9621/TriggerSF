@@ -1,10 +1,10 @@
-#include "TriggerEfficiency/DataFltr/interface/DataFltr.h"
+#include "TriggerEfficiency/DataFltr/interface/MuFltr.h"
 #include "TLorentzVector.h"
 #include <math.h>
 using namespace std;
 
 double
-DataFltr::delR( const pat::Muon& mu, const edm::Event& iEvent , const string& label ) {
+MuFltr::delR( const pat::Muon& mu, const edm::Event& iEvent , const string& label ) {
     vector<double> dR;
 
     for ( pat::TriggerObjectStandAlone obj : *_triggerObjects ) {
@@ -26,7 +26,7 @@ DataFltr::delR( const pat::Muon& mu, const edm::Event& iEvent , const string& la
 }
 
 void
-DataFltr::passTrigger( pat::Muon& mu, const edm::Event& iEvent ) {
+MuFltr::passTrigger( pat::Muon& mu, const edm::Event& iEvent ) {
     for( int i = 0; i < ( int )( _trigger.size() ); i++ ) {
         string name = _trigger[i].getParameter<string>( "HLTName" );
         string label = _trigger[i].getParameter<string>( "FilterName" );
@@ -38,7 +38,7 @@ DataFltr::passTrigger( pat::Muon& mu, const edm::Event& iEvent ) {
 }
 
 bool
-DataFltr::zParent( const pat::MuonCollection& muons ) const {
+MuFltr::zParent( const pat::MuonCollection& muons ) const {
     TLorentzVector lep1( muons[0].px(), muons[0].py(), muons[0].pz(), muons[0].energy() );
     TLorentzVector lep2( muons[1].px(), muons[1].py(), muons[1].pz(), muons[1].energy() );
     double mass = ( lep1 + lep2 ).M();
@@ -46,7 +46,7 @@ DataFltr::zParent( const pat::MuonCollection& muons ) const {
 }
 
 bool
-DataFltr::passId( const pat::Muon& mu, const string& level ) const {
+MuFltr::passId( const pat::Muon& mu, const string& level ) const {
     if( level == "loose" ) {
         return mu.isLooseMuon();
     }
@@ -63,7 +63,7 @@ DataFltr::passId( const pat::Muon& mu, const string& level ) const {
 }
 
 bool
-DataFltr::passKin( const pat::Muon& mu, const bool& isTag ) const {
+MuFltr::passKin( const pat::Muon& mu, const bool& isTag ) const {
     double eta = mu.eta();
     double pt = mu.pt();
     bool MuKin( false );
@@ -80,7 +80,7 @@ DataFltr::passKin( const pat::Muon& mu, const bool& isTag ) const {
 }
 
 bool
-DataFltr::passTKIso( const pat::Muon& mu, const double& cut ) const {
+MuFltr::passTKIso( const pat::Muon& mu, const double& cut ) const {
     if( mu.isolationR03().sumPt / mu.pt() < cut ) {
         return true;
     }
@@ -91,7 +91,7 @@ DataFltr::passTKIso( const pat::Muon& mu, const double& cut ) const {
 }
 
 bool
-DataFltr::passPFIso( const pat::Muon& mu, const double& cut ) const {
+MuFltr::passPFIso( const pat::Muon& mu, const double& cut ) const {
     double  chIso   = mu.pfIsolationR04().sumChargedHadronPt;
     double  nhIso   = mu.pfIsolationR04().sumNeutralHadronEt;
     double  gIso    = mu.pfIsolationR04().sumPhotonEt;

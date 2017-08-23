@@ -8,13 +8,13 @@ import FWCore.ParameterSet.Config as cms
 options = opts.VarParsing ('analysis')
 
 options.register('sample',
-    'file:/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/test/test.root',
+    'file:/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/test/test_electron.root',
     opts.VarParsing.multiplicity.list,
     opts.VarParsing.varType.string,
     'Sample to analyze')
 
 options.register('output',
-    'TnP_test.root',
+    'TnP_test_electron.root',
     opts.VarParsing.multiplicity.singleton,
     opts.VarParsing.varType.string,
     'Output label')
@@ -94,19 +94,17 @@ print '>>Finished basic setups...'
 from TriggerEfficiency.DataFltr.TnP_cfi import *
 if options.lepton == "electron":
     process.datafltr = cms.EDFilter(
-            "DataFltr",
+            "ElFltr",
             commontool,
             electrontool,
-            lepton_type = cms.string(options.lepton),
             useMC = cms.bool(options.useMC)  # Check whether lepton has gen level lepton and  whether tag and probe has MC truth Z parent 
             )
 
 elif options.lepton == "muon":
     process.datafltr = cms.EDFilter(
-            "DataFltr",
+            "MuFltr",
             commontool,
             muontool,
-            lepton_type = cms.string(options.lepton),
             useMC = cms.bool(options.useMC)   # Check whether lepton has gen level lepton and  whether tag and probe has MC truth Z parent 
             )
 

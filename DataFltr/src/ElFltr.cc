@@ -1,9 +1,10 @@
-#include "TriggerEfficiency/DataFltr/interface/DataFltr.h"
+#include "TriggerEfficiency/DataFltr/interface/ElFltr.h"
 #include "TLorentzVector.h"
 using namespace std;
 
+
 double
-DataFltr::delR( const pat::Electron& el , const edm::Event& iEvent, const string& label ) {
+ElFltr::delR( const pat::Electron& el , const edm::Event& iEvent, const string& label ) {
     vector<double> dR;
 
     for ( pat::TriggerObjectStandAlone obj : *_triggerObjects ) {
@@ -25,7 +26,7 @@ DataFltr::delR( const pat::Electron& el , const edm::Event& iEvent, const string
 }
 
 void
-DataFltr::passTrigger( pat::Electron& el, const edm::Event& iEvent ) {
+ElFltr::passTrigger( pat::Electron& el, const edm::Event& iEvent ) {
     for( int i = 0; i < ( int )_trigger.size(); i++ ) {
         string name  = _trigger[i].getParameter<string>( "HLTName" );
         string label = _trigger[i].getParameter<string>( "FilterName" );
@@ -37,15 +38,15 @@ DataFltr::passTrigger( pat::Electron& el, const edm::Event& iEvent ) {
 }
 
 bool
-DataFltr::zParent( pat::ElectronCollection& ele ) const {
-    TLorentzVector lep1( ele[0].px(), ele[0].py(), ele[0].pz(), ele[0].energy() );
-    TLorentzVector lep2( ele[1].px(), ele[1].py(), ele[1].pz(), ele[1].energy() );
+ElFltr::zParent( pat::ElectronCollection& el ) const {
+    TLorentzVector lep1( el[0].px(), el[0].py(), el[0].pz(), el[0].energy() );
+    TLorentzVector lep2( el[1].px(), el[1].py(), el[1].pz(), el[1].energy() );
     double mass = ( lep1 + lep2 ).M();
     return ( mass > _zmin && mass < _zmax );
 }
 
 bool
-DataFltr::passKin( const pat::Electron& el, const bool& isTag ) const {
+ElFltr::passKin( const pat::Electron& el, const bool& isTag ) const {
     double eta = el.superCluster()->eta();
     double pt = el.pt();
     bool ElKin( false );
@@ -63,13 +64,28 @@ DataFltr::passKin( const pat::Electron& el, const bool& isTag ) const {
 
 
 bool
-DataFltr::passId( const edm::Ptr<pat::Electron>& elptr, const string& level ) {
-    return ( elMgr->getIDMap( level ) )[elptr];
+ElFltr::passId( const edm::Ptr<pat::Electron>& elptr, const string& level ) {
+
+    if( level == "loose" ) {
+        return (*_looseMapHandle)[elptr];
+    }
+
+    else if( level == "medium" ) {
+        return (*_mediumMapHandle)[elptr];
+    }
+
+    else if( level == "tight" ) {
+        return (*_tightMapHandle)[elptr];
+    }
+
+    else {
+        return (*_heepMapHandle)[elptr];
+    }
 }
 
 //https://twiki.cern.ch/twiki/bin/view/CMS/CutBasedElectronIdentificationRun2#Recipe80X
 bool
-DataFltr::passImpact( const pat::Electron& el ) const {
+ElFltr::passImpact( const pat::Electron& el ) const {
     if( fabs( el.eta() ) < 1.4442  ) {
         if( fabs( el.gsfTrack()->dxy( _vtx.front().position() ) ) < 0.05 ){
             return true;
