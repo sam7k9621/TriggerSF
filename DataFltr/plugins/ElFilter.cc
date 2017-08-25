@@ -129,7 +129,7 @@ ElFltr::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
     unique_ptr< vector< pat::Electron> > proEleptr ( new vector< pat::Electron> );
     tagEleptr->push_back(electrons[first]);
     proEleptr->push_back(electrons[second]);
-    
+
     //output.root label name
     iEvent.put( move(tagEleptr) , "Tag");
     iEvent.put( move(proEleptr) , "Probe");

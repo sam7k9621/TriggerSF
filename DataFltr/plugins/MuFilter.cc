@@ -113,7 +113,7 @@ MuFltr::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
     unique_ptr< vector<pat::Muon> > proMuonptr ( new vector< pat::Muon> );
     tagMuonptr ->push_back(_muons[first] );
     proMuonptr ->push_back(_muons[second]);
-
+    
     iEvent.put( move(tagMuonptr) ,"Tag");
     iEvent.put( move(proMuonptr) ,"Probe");
     return true;
