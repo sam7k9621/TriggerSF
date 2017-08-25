@@ -16,31 +16,35 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 
 class LepEfficiency {
 
     public:
-        LepEfficiency() {}
+        LepEfficiency(){};
         virtual ~LepEfficiency() noexcept( false ) {}
-
-        virtual void AddHist( const std::string& title, const std::vector<double>& lst ) {
+        
+        //https://kheresy.wordpress.com/2014/10/03/override-and-final-in-cpp-11/
+        //only virtual funciton can has final specifier ( just to avoid overriding by child class )
+        virtual void AddHist( const std::string& title, const std::vector<double>& lst ) final{
             TH1D* h = fs->make<TH1D>( title.c_str(), title.c_str(), lst.size()-1, &( lst[0] ) );
             _histmgr.AddObj( h );
         }
 
-        virtual TH1* Hist( const std::string& name ) {
+        virtual TH1* Hist( const std::string& name ) final {
             return _histmgr.GetObj( name );
         }
     private:
 
         edm::Service<TFileService> fs;
         HistMgr _histmgr;
+        int* a;
 
 };
 
 class MuEfficiency : public edm::one::EDAnalyzer<edm::one::SharedResources>, public LepEfficiency  {
     public:
-        explicit MuEfficiency( const edm::ParameterSet& );
+        MuEfficiency( const edm::ParameterSet& );
         ~MuEfficiency();
 
         static void fillDescriptions( edm::ConfigurationDescriptions& descriptions );

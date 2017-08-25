@@ -74,7 +74,7 @@ MuEfficiency::analyze( const edm::Event& iEvent, const edm::EventSetup& iSetup )
         for( const auto& hlt : hltlist ) {
             if( pro.hasUserInt( hlt ) ) {
                 if( fabs( pro.eta() ) < etacut ) {
-                    Hist( "total_pt_" + triname ) -> Fill( pro.pt() );
+                    Hist( "pass_pt_" + triname ) -> Fill( pro.pt() );
                 }
 
                 if( pro.pt() > ptcut ) {
