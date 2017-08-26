@@ -7,7 +7,13 @@ using namespace std;
 *******************************************************************************/
 
 extern string GetResultsName( const string& type, const string& prefix ){
-    return "";
+    string ans = PlotMgr().OptName();
+
+    if( prefix == "" ) {
+        ans.erase( ans.begin() );
+    }
+
+    return ( PlotMgr().ResultsDir() / ( prefix + ans + "." + type ) );
 }
 
 extern TrgPlotMgr& PlotMgr(const string& subdir){
