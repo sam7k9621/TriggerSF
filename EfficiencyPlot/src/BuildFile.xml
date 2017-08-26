@@ -4,6 +4,8 @@
 
 <use name="PhysicsTools/UtilAlgos"/>
 <use name="FWCore/ServiceRegistry"/>
+<use name="ManagerUtils/ArgHelper"/>
+<use name="ManagerUtils/PlotUtils"/>
 
 <flags CXXFLAGS="-g"/>
 

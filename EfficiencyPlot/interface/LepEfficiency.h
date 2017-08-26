@@ -13,6 +13,7 @@
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 
 #include "TriggerEfficiency/EfficiencyPlot/interface/HistMgr.h"
+#include "TH1.h"
 
 #include <string>
 #include <vector>
@@ -37,7 +38,7 @@ class LepEfficiency {
     private:
 
         edm::Service<TFileService> fs;
-        HistMgr _histmgr;
+        HistMgr<TH1D> _histmgr;
         int* a;
 
 };

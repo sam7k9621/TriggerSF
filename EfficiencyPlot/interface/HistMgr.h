@@ -4,11 +4,11 @@
 #include <map>
 #include <memory>
 #include <string>
-#include "TH1.h"
 
+template<typename T>
 class HistMgr {
 
-        typedef std::map<std::string, TH1* > ObjContainer;
+        typedef std::map<std::string, T* > ObjContainer;
 
     public:
         HistMgr() {}
@@ -16,14 +16,19 @@ class HistMgr {
         HistMgr( const HistMgr& )            = delete;
         HistMgr& operator=( const HistMgr& ) = delete;
 
-        void AddObj( TH1* );
+        void AddObj( T* );
         void RemoveObj( const std::string& );
-        TH1* GetObj( const std::string& );
-        const TH1* GetObj( const std::string& ) const;
+        T* GetObj( const std::string& );
+        const T* GetObj( const std::string& ) const;
+        void CleanAll();
 
     private:
         ObjContainer _objmap;
 };
 
+/*******************************************************************************
+*   Including template class implementation
+*******************************************************************************/
+#include "TriggerEfficiency/EfficiencyPlot/src/HistMgr.ipp"
 
 #endif
