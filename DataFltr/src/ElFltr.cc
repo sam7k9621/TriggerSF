@@ -65,21 +65,20 @@ ElFltr::passKin( const pat::Electron& el, const bool& isTag ) const {
 
 bool
 ElFltr::passId( const edm::Ptr<pat::Electron>& elptr, const string& level ) {
-
     if( level == "loose" ) {
-        return (*_looseMapHandle)[elptr];
+        return ( *_looseMapHandle )[elptr];
     }
 
     else if( level == "medium" ) {
-        return (*_mediumMapHandle)[elptr];
+        return ( *_mediumMapHandle )[elptr];
     }
 
     else if( level == "tight" ) {
-        return (*_tightMapHandle)[elptr];
+        return ( *_tightMapHandle )[elptr];
     }
 
     else {
-        return (*_heepMapHandle)[elptr];
+        return ( *_heepMapHandle )[elptr];
     }
 }
 
@@ -87,7 +86,7 @@ ElFltr::passId( const edm::Ptr<pat::Electron>& elptr, const string& level ) {
 bool
 ElFltr::passImpact( const pat::Electron& el ) const {
     if( fabs( el.eta() ) < 1.4442  ) {
-        if( fabs( el.gsfTrack()->dxy( _vtx.front().position() ) ) < 0.05 ){
+        if( fabs( el.gsfTrack()->dxy( _vtx.front().position() ) ) < 0.05 ) {
             return true;
         }
 
@@ -97,7 +96,7 @@ ElFltr::passImpact( const pat::Electron& el ) const {
     }
 
     else {
-        if( fabs( el.gsfTrack()->dxy( _vtx.front().position() ) ) < 0.10 ){
+        if( fabs( el.gsfTrack()->dxy( _vtx.front().position() ) ) < 0.10 ) {
             return true;
         }
 

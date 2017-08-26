@@ -22,18 +22,18 @@
 #include <vector>
 
 class ElFltr : public edm::stream::EDFilter<> {
-   public:
-      explicit ElFltr(const edm::ParameterSet&);
-      ~ElFltr();
+    public:
+        explicit ElFltr( const edm::ParameterSet& );
+        ~ElFltr();
 
-      static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
+        static void fillDescriptions( edm::ConfigurationDescriptions& descriptions );
 
-   private:
-      virtual void beginStream(edm::StreamID) override;
-      virtual bool filter(edm::Event&, const edm::EventSetup&) override;
-      virtual void endStream() override;
+    private:
+        virtual void beginStream( edm::StreamID ) override;
+        virtual bool filter( edm::Event&, const edm::EventSetup& ) override;
+        virtual void endStream() override;
 
-      /*------electron function------*/
+        /*------electron function------*/
         double delR( const pat::Electron&, const edm::Event&, const std::string& );
         void passTrigger( pat::Electron&, const edm::Event& );
 
@@ -41,8 +41,8 @@ class ElFltr : public edm::stream::EDFilter<> {
         bool passKin( const pat::Electron&, const bool& ) const;
         bool passId( const edm::Ptr<pat::Electron>&, const std::string& );
         bool passImpact( const pat::Electron& ) const;
-      
-      /*------common memeber------*/
+
+        /*------common memeber------*/
         const edm::EDGetTokenT<std::vector<pat::Muon>> _musrc;
         const edm::EDGetTokenT<std::vector<pat::Electron>> _elsrc;
         const edm::EDGetTokenT<std::vector<reco::Vertex> > _vtxsrc;
@@ -67,7 +67,7 @@ class ElFltr : public edm::stream::EDFilter<> {
         const double _pPtMin;
         const std::vector<edm::ParameterSet> _trigger;
 
-        /*-------electron member------*/  
+        /*-------electron member------*/
         const bool _pImpact;
         const bool _tImpact;
 
@@ -79,7 +79,7 @@ class ElFltr : public edm::stream::EDFilter<> {
         edm::Handle<edm::ValueMap<bool>> _mediumMapHandle;
         edm::Handle<edm::ValueMap<bool>> _tightMapHandle;
         edm::Handle<edm::ValueMap<bool>> _heepMapHandle;
-       
+
         /*------common tool------*/
         reco::VertexCollection  _vtx;
         pat::MuonCollection     _muons;

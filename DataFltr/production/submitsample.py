@@ -26,7 +26,7 @@ config.JobType.maxJobRuntimeMin = 2000 # Requesting slightly more runtime
 config.Data.inputDataset  = '{2}'
 config.Data.inputDBS      = 'global'
 config.Data.splitting     = '{3}'
-config.Data.unitsPerJob   = 1
+config.Data.unitsPerJob   = 3
 config.Data.outLFNDirBase = '{4}'
 config.Data.outputDatasetTag = '{5}'
 config.Site.storageSite = '{6}'
@@ -42,7 +42,7 @@ def submitsample(argv):
     parser = argparse.ArgumentParser(description='Process to sending crab for TnP')
     parser.add_argument('-i', '--inputdataset', help='which dataset to run', type=str, default=None, required=True)
     parser.add_argument('-s', '--site'        , help='which site to store' , type=str, default='T2_TW_NCHC')
-    parser.add_argument('-d', '--directory'   , help='the storage lfn dir' , type=str, default='/store/user/pusheng/2017B2GTriggerEfficiency')
+    parser.add_argument('-d', '--directory'   , help='the storage lfn dir' , type=str, default='/store/user/pusheng/20170826B2GTriggerEfficiency')
     parser.add_argument('-l', '--lepton'      , help='which lepton using'  , type=str, default=None, required=True)
     parser.add_argument('-m', '--useMC'       , action='store_true')
 

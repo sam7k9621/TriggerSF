@@ -2,7 +2,7 @@
 
 using namespace std;
 
-MuFltr::MuFltr(const edm::ParameterSet& iConfig):
+MuFltr::MuFltr( const edm::ParameterSet& iConfig ):
     _musrc ( consumes<vector<pat::Muon> >( iConfig.getParameter<edm::InputTag>( "musrc" ) ) ),
     _elsrc ( consumes<vector<pat::Electron> >( iConfig.getParameter<edm::InputTag>( "elsrc" ) ) ),
     _vtxsrc  ( consumes<vector<reco::Vertex> > ( iConfig.getParameter<edm::InputTag >( "vtxsrc" ) ) ),
@@ -17,125 +17,109 @@ MuFltr::MuFltr(const edm::ParameterSet& iConfig):
     _pEtaMax ( iConfig.getParameter<double>( "probeEtaMax" ) ),
     _tPtMin ( iConfig.getParameter <double>( "tagPtMin" ) ),
     _pPtMin ( iConfig.getParameter <double>( "probePtMin" ) ),
-    _trigger ( iConfig.getParameter<vector<edm::ParameterSet>>( "triggerCache" ) ), 
+    _trigger ( iConfig.getParameter<vector<edm::ParameterSet>>( "triggerCache" ) ),
     _tPFIso( iConfig.getParameter<double>( "TagPassPFIso" ) ),
     _pPFIso( iConfig.getParameter<double>( "ProbePassPFIso" ) ),
     _tTKIso( iConfig.getParameter<double>( "TagPassTKIso" ) ),
-    _pTKIso( iConfig.getParameter<double>( "ProbePassTKIso" ) ) 
-{
-        produces< vector<pat::Muon> >("Tag");
-        produces< vector<pat::Muon> >("Probe");
+    _pTKIso( iConfig.getParameter<double>( "ProbePassTKIso" ) ) {
+    produces< vector<pat::Muon> >( "Tag" );
+    produces< vector<pat::Muon> >( "Probe" );
 }
 
-MuFltr::~MuFltr(){}
+MuFltr::~MuFltr() {}
 
 bool
-MuFltr::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
-{
-
-    iEvent.getByToken(_musrc , _muhandle);
-    iEvent.getByToken(_elsrc , _elhandle);
-    iEvent.getByToken(_vtxsrc, _vtxhandle);
-    iEvent.getByToken(_hltInputTag, _triggerResults);
-    iEvent.getByToken(_hltObjectsInputTag, _triggerObjects);
+MuFltr::filter( edm::Event& iEvent, const edm::EventSetup& iSetup ) {
+    iEvent.getByToken( _musrc , _muhandle );
+    iEvent.getByToken( _elsrc , _elhandle );
+    iEvent.getByToken( _vtxsrc, _vtxhandle );
+    iEvent.getByToken( _hltInputTag, _triggerResults );
+    iEvent.getByToken( _hltObjectsInputTag, _triggerObjects );
 
     //initialize the object by handle
-    if(_muhandle.isValid())
-    {
+    if( _muhandle.isValid() ) {
         _muons = *_muhandle;
     }
-    if(_elhandle.isValid())
-    {
+
+    if( _elhandle.isValid() ) {
         _electrons = *_elhandle;
     }
-    if(_vtxhandle.isValid() )
-    {
+
+    if( _vtxhandle.isValid() ) {
         _vtx = *_vtxhandle;
     }
 
     //no loose electrons
-    for(const auto& el : _electrons){
-        if(el.pt()>10 && fabs(el.eta()) < 2.5)
+    for( const auto& el : _electrons ) {
+        if( el.pt() > 10 && fabs( el.eta() ) < 2.5 ) {
             return false;
+        }
     }
 
     //pre-cut on muon pt
     //http://en.cppreference.com/w/cpp/algorithm/remove
     //https://stackoverflow.com/questions/4940259/lambdas-require-capturing-this-to-call-static-member-function
-    _muons.erase(std::remove_if(_muons.begin(),
-                                _muons.end(),
-                                [&](pat::Muon mu){return muPreCut(mu);}),
-                 _muons.end());
+    _muons.erase( std::remove_if( _muons.begin(),
+                                  _muons.end(),
+    [&]( pat::Muon mu ) {
+        return muPreCut( mu );
+    } ),
+    _muons.end() );
 
-    if(_muons.size() != 2)
+    if( _muons.size() != 2 ) {
         return false;
+    }
 
     //randomly choose the muons for tag
-    srand( (unsigned) time(NULL) );
-    int first  = rand()%2;
-    int second = (first+1)%2;
+    srand( ( unsigned ) time( NULL ) );
+    int first  = rand() % 2;
+    int second = ( first + 1 ) % 2;
 
     //confirm mother in z mass window
-    if (!zParent(_muons))
+    if ( !zParent( _muons ) ) {
         return false;
+    }
 
     //tag preselection
-    if(!
-        (
-        passId (_muons[first], _tagid) &&
-        passKin(_muons[first], true)   &&
-        passPFIso(_muons[first], _tPFIso) &&
-        passTKIso(_muons[first], _tTKIso)
-        )
-    )
+    if( ! ( passId ( _muons[first], _tagid ) && passKin( _muons[first], true ) ) ) {
         return false;
+    }
 
     //probe preselection
-    if(!
-        (
-        passId (_muons[second], _proid) &&
-        passKin(_muons[second], false)   &&
-        //https://coherence0815.wordpress.com/2015/12/19/tuple-in-c-11/
-        passPFIso(_muons[second], _pPFIso) &&
-        passTKIso(_muons[second], _pTKIso)
-        )
-    )
+    if( ! ( passId ( _muons[second], _proid ) && passKin( _muons[second], false ) ) ) {
         return false;
+    }
 
-    if(_useMC)
-        cout<<"useMC"<<endl;
+    if( _useMC ) {
+        cout << "useMC" << endl;
+    }
 
     //mark the passing particle
-    passTrigger(_muons[first] , iEvent);
-    passTrigger(_muons[second], iEvent);
-
+    passTrigger( _muons[first] , iEvent, true );
+    passTrigger( _muons[second], iEvent, false );
     unique_ptr< vector<pat::Muon> > tagMuonptr ( new vector< pat::Muon> );
     unique_ptr< vector<pat::Muon> > proMuonptr ( new vector< pat::Muon> );
-    tagMuonptr ->push_back(_muons[first] );
-    proMuonptr ->push_back(_muons[second]);
-    
-    iEvent.put( move(tagMuonptr) ,"Tag");
-    iEvent.put( move(proMuonptr) ,"Probe");
+    tagMuonptr ->push_back( _muons[first] );
+    proMuonptr ->push_back( _muons[second] );
+    iEvent.put( move( tagMuonptr ) , "Tag" );
+    iEvent.put( move( proMuonptr ) , "Probe" );
     return true;
-
-
 }
 
 void
-MuFltr::beginStream(edm::StreamID)
-{
+MuFltr::beginStream( edm::StreamID ) {
 }
 
 void
 MuFltr::endStream() {
 }
 void
-MuFltr::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
-  //The following says we do not know what parameters are allowed so do no validation
-  // Please change this to state exactly what you do use, even if it is no parameters
-  edm::ParameterSetDescription desc;
-  desc.setUnknown();
-  descriptions.addDefault(desc);
+MuFltr::fillDescriptions( edm::ConfigurationDescriptions& descriptions ) {
+    //The following says we do not know what parameters are allowed so do no validation
+    // Please change this to state exactly what you do use, even if it is no parameters
+    edm::ParameterSetDescription desc;
+    desc.setUnknown();
+    descriptions.addDefault( desc );
 }
 //define this as a plug-in
-DEFINE_FWK_MODULE(MuFltr);
+DEFINE_FWK_MODULE( MuFltr );

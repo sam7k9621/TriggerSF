@@ -19,14 +19,6 @@ electrontool = cms.PSet(
         #trigger we used
         triggerCache = cms.VPSet(
             cms.PSet(
-                HLTName = cms.string("HLT_Ele35_WPTight_Gsf_v*"),
-                FilterName = cms.string("hltEle35noerWPTightGsfTrackIsoFilter")
-            ),
-            cms.PSet(
-                HLTName = cms.string("HLT_Ele38_WPTight_Gsf_v*"),
-                FilterName = cms.string("hltEle38noerWPTightGsfTrackIsoFilter")
-            ),
-            cms.PSet(
                 HLTName = cms.string("HLT_Ele40_WPTight_Gsf_v*"),
                 FilterName = cms.string("hltEle40noerWPTightGsfTrackIsoFilter")
             )
@@ -58,7 +50,9 @@ muontool = cms.PSet(
         triggerCache = cms.VPSet(
             cms.PSet(
                 HLTName = cms.string("HLT_Mu50_v*"),
-                FilterName = cms.string("hltL3fL1sMu22Or25L1f0L2f10QL3Filtered50Q")
+                FilterName = cms.string("hltL3fL1sMu22Or25L1f0L2f10QL3Filtered50Q"),
+                TKIso = cms.bool(False),
+                PFIso = cms.bool(False)
             )
         ),
 

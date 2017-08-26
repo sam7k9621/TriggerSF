@@ -20,31 +20,31 @@
 #include <string>
 #include <vector>
 
-class MuFltr : public edm::stream::EDFilter<>{
+class MuFltr : public edm::stream::EDFilter<> {
     public:
-        explicit MuFltr(const edm::ParameterSet&);
+        explicit MuFltr( const edm::ParameterSet& );
         ~MuFltr();
 
-        static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
-    
+        static void fillDescriptions( edm::ConfigurationDescriptions& descriptions );
+
     private:
-      virtual void beginStream(edm::StreamID) override;
-      virtual bool filter(edm::Event&, const edm::EventSetup&) override;
-      virtual void endStream() override;
-       
-      /*------muon function------*/
+        virtual void beginStream( edm::StreamID ) override;
+        virtual bool filter( edm::Event&, const edm::EventSetup& ) override;
+        virtual void endStream() override;
+
+        /*------muon function------*/
         double delR( const pat::Muon&, const edm::Event&, const std::string& );
-        void passTrigger( pat::Muon&, const edm::Event& );
+        void passTrigger( pat::Muon&, const edm::Event&, const bool& );
 
         bool zParent( const pat::MuonCollection& )      const;
         bool passId ( const pat::Muon&, const std::string& ) const;
         bool passKin( const pat::Muon&, const bool& )   const;
-        bool passTKIso( const pat::Muon&, const double&) const;
-        bool passPFIso( const pat::Muon&, const double&) const;
-        bool muPreCut(pat::Muon mu){
-            return !(mu.pt()>10 && fabs(mu.eta()) < 2.5);
+        bool passTKIso( const pat::Muon&, const double& ) const;
+        bool passPFIso( const pat::Muon&, const double& ) const;
+        bool muPreCut( pat::Muon mu ) {
+            return !( mu.pt() > 10 && fabs( mu.eta() ) < 2.5 );
         }
-      /*------common memeber------*/
+        /*------common memeber------*/
         const edm::EDGetTokenT<std::vector<pat::Muon>> _musrc;
         const edm::EDGetTokenT<std::vector<pat::Electron>> _elsrc;
         const edm::EDGetTokenT<std::vector<reco::Vertex> > _vtxsrc;
@@ -68,7 +68,7 @@ class MuFltr : public edm::stream::EDFilter<>{
         const double _pPtMin;
         const std::vector<edm::ParameterSet> _trigger;
 
-        /*-------muon member------*/  
+        /*-------muon member------*/
         const double _tPFIso;
         const double _pPFIso;
         const double _tTKIso;

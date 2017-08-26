@@ -11,7 +11,7 @@ MuEfficiency::MuEfficiency( const edm::ParameterSet& iConfig ):
 
 {
     usesResource( "TFileService" );
-    
+
     /*****common setting*****/
     for( const auto& tagtri : _tagtri ) {
         string         triname = tagtri.getParameter<string>( "name" );

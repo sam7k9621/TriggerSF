@@ -7,8 +7,7 @@ ElEfficiency::ElEfficiency( const edm::ParameterSet& iConfig ):
     _tagtri( iConfig.getParameter<vector<edm::ParameterSet>>( "tagtrigger" ) ),
     _protri( iConfig.getParameter<vector<edm::ParameterSet>>( "protrigger" ) ),
     _pro ( consumes<vector<pat::Electron>>( iConfig.getParameter<edm::InputTag> ( "probe" ) ) ),
-    _tag ( consumes<vector<pat::Electron>>  ( iConfig.getParameter<edm::InputTag>( "tag" ) ) )
-{
+    _tag ( consumes<vector<pat::Electron>>  ( iConfig.getParameter<edm::InputTag>( "tag" ) ) ) {
     usesResource( "TFileService" );
 
     /*****common setting*****/

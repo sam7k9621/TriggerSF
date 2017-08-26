@@ -26,10 +26,36 @@ MuFltr::delR( const pat::Muon& mu, const edm::Event& iEvent , const string& labe
 }
 
 void
-MuFltr::passTrigger( pat::Muon& mu, const edm::Event& iEvent ) {
-    for( int i = 0; i < ( int )( _trigger.size() ); i++ ) {
-        string name = _trigger[i].getParameter<string>( "HLTName" );
-        string label = _trigger[i].getParameter<string>( "FilterName" );
+MuFltr::passTrigger( pat::Muon& mu, const edm::Event& iEvent, const bool& isTag ) {
+    for( const auto& trg : _trigger ) {
+        string name =  trg.getParameter<string>( "HLTName" );
+        string label = trg.getParameter<string>( "FilterName" );
+        bool   tkiso = trg.getParameter<bool>  ( "TKIso" );
+        bool   pfiso = trg.getParameter<bool>  ( "PFIso" );
+
+        if( tkiso ) {
+            if( isTag ){
+                if( !passPFIso( mu, _tPFIso ) ) {
+                    continue;
+                }
+
+                else if( !passPFIso( mu, _pPFIso ) ) {
+                    continue;
+                }
+            }
+        }
+
+        if( pfiso ) {
+            if( isTag ){
+                if( !passTKIso( mu, _tTKIso ) ) {
+                    continue;
+                }
+
+                else if( !passPFIso( mu, _pTKIso ) ) {
+                    continue;
+                }
+            }
+        }
 
         if ( delR( mu, iEvent, label ) < 0.1 ) {
             mu.addUserInt( name, 1 );
