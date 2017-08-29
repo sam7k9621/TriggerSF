@@ -33,6 +33,7 @@ extern void PlotEff(){
 
 extern void InitSetting(){
     PlotMgr().initPlot();
+    PlotMgr().SetColor();
 }
 
 extern void DrawEff(){
@@ -45,7 +46,7 @@ extern void DrawEff(){
 
 extern void DrawEta(const string& trg){
 
-    string triname = dra::GetSingle<string>("triname", PlotMgr().GetSubTree(trg) );
+    string trgname = dra::GetSingle<string>("trgname", PlotMgr().GetSubTree(trg) );
     string cut     = dra::GetSingle<string>("pcut"   , PlotMgr().GetSubTree(trg) );
     
     
@@ -53,19 +54,22 @@ extern void DrawEta(const string& trg){
     mgr::SetSinglePad(c);
 
     TH1F*    h = gPad->DrawFrame(-3,0,3,1.2);
-    SetHist( h, "#eta", "efficiency");
+    SetHist( h, "#eta", "Efficiency");
     mgr::SetAxis( h );
+   
+    TLegend* leg = mgr::NewLegend( 0.55, 0.2, 0.65, 0.3 );
+    leg->SetLineColor( kWhite );
     
-    Hist("etaeff"+trg)->Draw("EP");
-
+    for( const auto& ht : Hist("etaeff_"+trg) ){
+        ht->Draw("EP");
+        leg->AddEntry(ht, ht->GetTitle(), "lp");
+    }
+    leg->Draw();
+    
     mgr::DrawCMSLabelOuter( PRELIMINARY );
 
-    if( PlotMgr().GetOption<string>( "source" ) != "mc" ) {
-        mgr::DrawLuminosity( 36811 );
-    }
-
-    TPaveText *pt = mgr::NewTextBox( .73, .81, .93, .87 );
-    pt->AddText( PlotMgr().GetOption<string>( "lepton" ).c_str() );
+    TPaveText *pt = mgr::NewTextBox( .45, .79, .93, .87 );
+    pt->AddText( (trgname+cut).c_str() );
     pt->Draw();
 
     TLine* line = new TLine( -3, 1, 3, 1 );
@@ -73,13 +77,9 @@ extern void DrawEta(const string& trg){
     line->SetLineStyle( 8 );
     line->Draw();
 
-    TLegend* leg = mgr::NewLegend( 0.65, 0.4, 0.75, 0.7 );
-    leg->SetLineColor( kWhite );
-    leg->SetHeader( trg.c_str(), "C");
-    leg->AddEntry( Hist("etaeff"+trg), triname.c_str(), "lp");
-
-    mgr::SaveToROOT( c, GetResultsName( "root", "eff"), "Eta_Eff_"+trg );
-
+    //mgr::SaveToROOT( c, GetResultsName( "root", "eff"), "Eta_Eff_"+trg );
+    mgr::SaveToPDF( c, GetResultsName( "pdf", "Eta_Eff_"+trg ) );
+    
     delete c;
     delete pt;
     delete line;
@@ -88,7 +88,7 @@ extern void DrawEta(const string& trg){
 
 extern void DrawPt(const string& trg){
 
-    string triname = dra::GetSingle<string>("triname", PlotMgr().GetSubTree(trg) );
+    string trgname = dra::GetSingle<string>("trgname", PlotMgr().GetSubTree(trg) );
     string cut     = dra::GetSingle<string>("ecut"   , PlotMgr().GetSubTree(trg) );
     
     
@@ -96,32 +96,31 @@ extern void DrawPt(const string& trg){
     mgr::SetSinglePad(c);
 
     TH1F*    h = gPad->DrawFrame(0, 0, 200, 1.2);
-    SetHist( h, "P_{T}", "efficiency");
+    SetHist( h, "P_{T}", "Efficiency");
     mgr::SetAxis( h );
     
-    Hist("pteff"+trg)->Draw("EP");
-
+    TLegend* leg = mgr::NewLegend( 0.65, 0.3, 0.75, 0.4 );
+    leg->SetLineColor( kWhite );
+   
+    for( const auto& ht : Hist("pteff_"+trg) ){
+        ht->Draw("EP");
+        leg->AddEntry(ht, ht->GetTitle(), "lp");
+    }
+    leg->Draw();
+    
     mgr::DrawCMSLabelOuter( PRELIMINARY );
 
-    if( PlotMgr().GetOption<string>( "source" ) != "mc" ) {
-        mgr::DrawLuminosity( 36811 );
-    }
-
-    TPaveText *pt = mgr::NewTextBox( .73, .81, .93, .87 );
-    pt->AddText( PlotMgr().GetOption<string>( "lepton" ).c_str() );
+    TPaveText *pt = mgr::NewTextBox( .55, .81, .93, .87 );
+    pt->AddText( (trgname+cut).c_str() );
     pt->Draw();
 
     TLine* line = new TLine( 0, 1, 200, 1 );
     line->SetLineColor( kRed );
     line->SetLineStyle( 8 );
     line->Draw();
-
-    TLegend* leg = mgr::NewLegend( 0.65, 0.4, 0.75, 0.7 );
-    leg->SetLineColor( kWhite );
-    leg->SetHeader( trg.c_str(), "C");
-    leg->AddEntry( Hist("pteff"+trg), triname.c_str(), "lp");
-
-    mgr::SaveToROOT( c, GetResultsName( "root", "eff"), "Pt_Eff_"+trg );
+    
+    //mgr::SaveToROOT( c, GetResultsName( "root", "eff"), "Pt_Eff_"+trg );
+    mgr::SaveToPDF( c, GetResultsName( "pdf", "Pt_Eff_"+trg ) ); 
     
     delete c;
     delete pt;
@@ -140,6 +139,6 @@ extern void SetHist(TH1* h, const string& xaxis, const string& yaxis){
     h->SetMarkerColor(kAzure - 3);
 }
 
-extern TGraphAsymmErrors* Hist(const string& name){
+extern vector<TGraphAsymmErrors*> Hist(const string& name){
     return PlotMgr().GetHist(name);
 }

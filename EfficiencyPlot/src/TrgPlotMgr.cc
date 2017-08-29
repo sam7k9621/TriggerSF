@@ -16,39 +16,62 @@ TrgPlotMgr::TrgPlotMgr(const string& subdir):
 
 TrgPlotMgr::~TrgPlotMgr(){
 
-    _histmgr.CleanAll();
+    for(auto& h : _histmgr){
+        h.CleanAll();
+    }
+}
+
+void TrgPlotMgr::SetColor(){
+
+    Color_t c[] = {kGreen-6, kAzure-3, kOrange+1, kRed-7, kMagenta+2, kGray+1};
+
+    for(int i=0; i< (int)_histmgr.size();i++){
+        _histmgr[i].SetLineColor(c[i]);
+    }
 }
 
 void TrgPlotMgr::initPlot(){
 
-    TFile* file = TFile::Open( GetSingleData<string>("inputfile").c_str() );
-    TDirectory* dir = file->GetDirectory("demo");
+    for(const auto& ver : GetListData<string>("verlst")){
+        TFile* file = TFile::Open( GetSingleData<string>(ver).c_str() );
+        TDirectory* dir = file->GetDirectory("demo");
 
-    for(const auto& trg : GetListData<string>("trglst")){
-        
-        TH1D* passPt;
-        TH1D* passEta;
-        TH1D* totalPt;
-        TH1D* totalEta;
-        
-        dir->GetObject( ("pass_pt_" + trg)  .c_str(), passPt  );
-        dir->GetObject( ("pass_eta_" + trg) .c_str(), passEta );
-        dir->GetObject( ("total_pt_" + trg) .c_str(), totalPt );
-        dir->GetObject( ("total_eta_" + trg).c_str(), totalEta);
+        HistMgr<TGraphAsymmErrors> hist(ver);
 
-        TGraphAsymmErrors* peff = new TGraphAsymmErrors( passPt , totalPt , "b" ); 
-        TGraphAsymmErrors* eeff = new TGraphAsymmErrors( passEta, totalEta, "b" );
+        for(const auto& trg : GetListData<string>("trglst")){
+            
+            TH1D* passPt;
+            TH1D* passEta;
+            TH1D* totalPt;
+            TH1D* totalEta;
+            
+            dir->GetObject( ("pass_pt_" + trg)  .c_str(), passPt  );
+            dir->GetObject( ("pass_eta_" + trg) .c_str(), passEta );
+            dir->GetObject( ("total_pt_" + trg) .c_str(), totalPt );
+            dir->GetObject( ("total_eta_" + trg).c_str(), totalEta);
 
-        peff->SetName( ("pteff_"+trg  ).c_str() );
-        eeff->SetName( ("etaeff_"+trg ).c_str() );
+            TGraphAsymmErrors* peff = new TGraphAsymmErrors( passPt , totalPt , "b" ); 
+            TGraphAsymmErrors* eeff = new TGraphAsymmErrors( passEta, totalEta, "b" );
 
-        _histmgr.AddObj(peff);
-        _histmgr.AddObj(eeff);
+            peff->SetName( ("pteff_"  + trg ).c_str() );
+            eeff->SetName( ("etaeff_" + trg ).c_str() );
+
+            hist.AddObj(peff);
+            hist.AddObj(eeff);
+        }
+        _histmgr.emplace_back(hist);
+        file->Close();
     }
 
-    file->Close();
 }
 
-TGraphAsymmErrors* TrgPlotMgr::GetHist(const string& name){
-    return _histmgr.GetObj( name);
+vector<TGraphAsymmErrors*> 
+TrgPlotMgr::GetHist(const string& name){
+    
+    vector<TGraphAsymmErrors*> histlst;
+    for(auto& h : _histmgr){
+        histlst.push_back( h.GetObj( name ) ); 
+    }
+
+    return histlst;
 }

@@ -1,0 +1,16 @@
+{
+    "inputfile" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/test/Efficiency_test_electron.root",
+    "trglst" : ["ele40"],
+    "verlst" : ["Bv2","Cv2"],
+
+    "Bv2" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/test/Eff_runB_electron.root",
+    "Cv2" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/test/Eff_runC_electron.root",
+
+
+    "ele40":{
+        "trgname" : "HLT_Ele40_WPTight_Gsf_v*",
+        "ecut" : "",
+        "pcut" : " (P_{T} > 40)"
+    }
+
+}

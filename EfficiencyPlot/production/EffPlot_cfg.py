@@ -8,7 +8,7 @@ import FWCore.ParameterSet.VarParsing as opts
 options = opts.VarParsing ('analysis')
 
 options.register('sample',
-    'file:/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/test/TnP_electron.root',
+    'file:/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/test/TnP_test_electron.root',
     opts.VarParsing.multiplicity.list,
     opts.VarParsing.varType.string,
     'Sample to analyze')
@@ -41,7 +41,7 @@ options.setDefault('maxEvents', -1 )
 
 options.parseArguments()
 
-print ">>Running with [ MC sample:{0} | {1} ] \n>>Dataset : {2}".format(options.useMC, options.lepton, options.sample)
+print ">>Running with [ MC sample:{0} | {1} ] \n>>Dataset : {2}".format(options.useMC, options.lepton, options.inputFiles)
 
 #-------------------------------------------------------------------------------
 #   Process Setup
@@ -50,25 +50,25 @@ print ">>Running with [ MC sample:{0} | {1} ] \n>>Dataset : {2}".format(options.
 process = cms.Process("Demo")
 process.load("FWCore.MessageService.MessageLogger_cfi")
 
-process.MessageLogger.cerr.FwkReport.reportEvery = 100
-if options.Debug :
-    process.MessageLogger.cerr.FwkReport.reportEvery = 1
-
-if not options.useMC :
-    import FWCore.PythonUtilities.LumiList as LumiList
-    process.source.lumisToProcess = LumiList.LumiList(filename = '/wk_cms/sam7k9621/CMSSW_8_0_10/src/TriggerEfficiency/TriggerData/data/golden.json').getVLuminosityBlockRange()
-    print ">>Finished apply lumi mask"
-
 #-------------------------------------------------------------------------------
 #   Parsing 
 #-------------------------------------------------------------------------------
 
+process.MessageLogger.cerr.FwkReport.reportEvery = 100
+if options.Debug :
+    process.MessageLogger.cerr.FwkReport.reportEvery = 1
+
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(options.maxEvents) )
 
 process.source = cms.Source("PoolSource",
-    fileNames = cms.untracked.vstring(options.sample)
+    fileNames = cms.untracked.vstring(options.inputFiles)
 )
 print '>>Finished basic setups...'
+
+if not options.useMC :
+    import FWCore.PythonUtilities.LumiList as LumiList
+    process.source.lumisToProcess = LumiList.LumiList(filename = '/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/test/golden.txt').getVLuminosityBlockRange()
+    print ">>Finished apply lumi mask"
 
 #-------------------------------------------------------------------------------
 #   Settings for Analyzer

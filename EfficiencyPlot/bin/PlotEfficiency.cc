@@ -6,7 +6,6 @@ using namespace std;
 int main( int argc, char *argv[] ) {
     opt::options_description de( "Command for SelectionCut" );
     de.add_options()
-    ( "lepton,l", opt::value<string>()->required(), "which lepton" )
     ( "source,s", opt::value<string>()->required(), "Which era of data or mc" )
     ;
     PlotMgr( "EfficiencyPlot" ).AddOptions( de );
@@ -20,6 +19,6 @@ int main( int argc, char *argv[] ) {
         return 1;
     }
 
-    PlotMgr().SetFileName( {"source", "lepton"} ) ;
+    PlotMgr().SetFileName( {"source"} ) ;
     PlotEff();
 }

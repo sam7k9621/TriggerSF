@@ -3,6 +3,7 @@
 
 #include <map>
 #include <memory>
+#include "TColor.h"
 #include <string>
 
 template<typename T>
@@ -11,19 +12,21 @@ class HistMgr {
         typedef std::map<std::string, T* > ObjContainer;
 
     public:
-        HistMgr() {}
+        HistMgr(const std::string&);
+        HistMgr();
         ~HistMgr() {}
-        HistMgr( const HistMgr& )            = delete;
-        HistMgr& operator=( const HistMgr& ) = delete;
 
         void AddObj( T* );
         void RemoveObj( const std::string& );
         T* GetObj( const std::string& );
         const T* GetObj( const std::string& ) const;
+        std::string MakeAliasName(const std::string&);
+        void SetLineColor( const Color_t );
         void CleanAll();
 
     private:
         ObjContainer _objmap;
+        std::string  _tag;
 };
 
 /*******************************************************************************

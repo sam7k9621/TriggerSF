@@ -10,6 +10,7 @@
 #include "TGraphAsymmErrors.h"
 
 #include <string>
+#include <vector>
 
 class TrgPlotMgr : public dra::Pathmgr, public dra::Readmgr, public dra::Parsermgr{
 
@@ -18,10 +19,12 @@ class TrgPlotMgr : public dra::Pathmgr, public dra::Readmgr, public dra::Parserm
         ~TrgPlotMgr();
 
         void initPlot();
-        TGraphAsymmErrors* GetHist(const std::string&);
+        void SetColor();
+        std::vector<TGraphAsymmErrors*> GetHist(const std::string&);
+        
 
     private:
-        HistMgr<TGraphAsymmErrors> _histmgr;
+        std::vector< HistMgr<TGraphAsymmErrors> > _histmgr;
 
 
 };

@@ -55,7 +55,6 @@ ElEfficiency::analyze( const edm::Event& iEvent, const edm::EventSetup& iSetup )
             continue;
         }
 
-        /****another cut for isolation or tkiso considering HLT********/
         /****setting for probe****/
         hltlist = _protri[i].getParameter<vector<string>>( "HLT" );
         ptcut   = _protri[i].getParameter<double>( "ptcut" );
