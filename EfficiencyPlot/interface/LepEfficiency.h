@@ -27,6 +27,16 @@ class LepEfficiency {
 
         //https://kheresy.wordpress.com/2014/10/03/override-and-final-in-cpp-11/
         //only virtual funciton can has final specifier ( just to avoid overriding by child class )
+        virtual void AddHist( 
+                const std::string& title, 
+                const int        & bin_size,
+                const double     & x_lower,
+                const double     & x_upper
+                ) final{
+            TH1D* h = fs->make<TH1D>( title.c_str(), title.c_str(), bin_size, x_lower, x_upper );
+            _histmgr.AddObj( h );
+        }
+
         virtual void AddHist( const std::string& title, const std::vector<double>& lst ) final{
             TH1D* h = fs->make<TH1D>( title.c_str(), title.c_str(), lst.size() - 1, &( lst[0] ) );
             _histmgr.AddObj( h );

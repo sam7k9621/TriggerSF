@@ -52,11 +52,11 @@ ElFltr::passKin( const pat::Electron& el, const bool& isTag ) const {
     bool ElKin( false );
 
     if( isTag ) {
-        ElKin = ( ( fabs( eta ) < _tEtaMax )   &&   ( fabs( eta ) <= 1.4442 || fabs( eta ) >= 1.5660 )   &&   pt > _tPtMin );
+        ElKin = ( ( fabs( eta ) < _tEtaMax )   &&   ( fabs( eta ) < 1.4442 || fabs( eta ) > 1.5660 )   &&   pt > _tPtMin );
     }
 
     else {
-        ElKin = ( ( fabs( eta ) < _tEtaMax )   &&   ( fabs( eta ) <= 1.4442 || fabs( eta ) >= 1.5660 )   &&   pt > _pPtMin );
+        ElKin = ( ( fabs( eta ) < _tEtaMax )   &&   pt > _pPtMin );
     }
 
     return ElKin;

@@ -27,6 +27,7 @@ log*
 *.db
 
 Tnp_2017_data_crab
+wrong_Tnp_2017_data_crab
 crab_config
 # Specific file exclusion
 # [relative/path/to/file]

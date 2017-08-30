@@ -95,11 +95,11 @@ MuFltr::passKin( const pat::Muon& mu, const bool& isTag ) const {
     bool MuKin( false );
 
     if( isTag ) {
-        MuKin = ( ( fabs( eta ) <= _tEtaMax ) && pt > _tPtMin );
+        MuKin = ( ( fabs( eta ) < _tEtaMax ) && pt > _tPtMin );
     }
 
     else {
-        MuKin = ( ( fabs( eta ) <= _pEtaMax ) && pt > _pPtMin );
+        MuKin = ( ( fabs( eta ) < _pEtaMax ) && pt > _pPtMin );
     }
 
     return MuKin;

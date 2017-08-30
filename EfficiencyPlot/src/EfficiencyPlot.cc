@@ -6,37 +6,49 @@ using namespace std;
 *   Global function
 *******************************************************************************/
 
-extern string GetResultsName( const string& type, const string& prefix ){
-    string ans = PlotMgr().OptName();
-
-    if( prefix == "" ) {
-        ans.erase( ans.begin() );
-    }
-
-    return ( PlotMgr().ResultsDir() / ( prefix + ans + "." + type ) );
-}
-
-extern TrgPlotMgr& PlotMgr(const string& subdir){
-    static TrgPlotMgr mgr( subdir );
+TrgPlotMgr<TGraphAsymmErrors>& PlotMgr(const string& subdir){
+    static TrgPlotMgr<TGraphAsymmErrors> mgr( subdir );
     return mgr;
 }
 
 /*******************************************************************************
 *   PlotEfficiency
 *******************************************************************************/
-extern void PlotEff(){
+void PlotEff(){
 
     InitSetting();
     DrawEff();
 
 }
 
-extern void InitSetting(){
-    PlotMgr().initPlot();
+void InitSetting(){
+    
+    for(const auto& ver : PlotMgr().GetListData<string>("verlst")){
+        TFile* file = TFile::Open( PlotMgr().GetSingleData<string>(ver).c_str() );
+
+        for(const auto& trg : PlotMgr().GetListData<string>("trglst")){
+            
+            TH1D* passPt  = (TH1D*) file->Get( ("pass_pt_"   + trg).c_str() );  
+            TH1D* passEta = (TH1D*) file->Get( ("pass_eta_"  + trg).c_str() );
+            TH1D* totalPt = (TH1D*) file->Get( ("total_pt_"  + trg).c_str() );
+            TH1D* totalEta= (TH1D*) file->Get( ("total_eta_" + trg).c_str() );
+
+            TGraphAsymmErrors* peff = new TGraphAsymmErrors( passPt , totalPt , "b" ); 
+            TGraphAsymmErrors* eeff = new TGraphAsymmErrors( passEta, totalEta, "b" );
+
+            peff->SetName( ("pteff_"  + trg ).c_str() );
+            eeff->SetName( ("etaeff_" + trg ).c_str() );
+
+            PlotMgr().AddPlot(ver, peff);
+            PlotMgr().AddPlot(ver, eeff);
+        }
+        file->Close();
+    }
+    
     PlotMgr().SetColor();
 }
 
-extern void DrawEff(){
+void DrawEff(){
     
     for( const auto& trg : PlotMgr().GetListData<string>("trglst") ) {
         DrawEta(trg);
@@ -44,7 +56,7 @@ extern void DrawEff(){
     }
 }
 
-extern void DrawEta(const string& trg){
+void DrawEta(const string& trg){
 
     string trgname = dra::GetSingle<string>("trgname", PlotMgr().GetSubTree(trg) );
     string cut     = dra::GetSingle<string>("pcut"   , PlotMgr().GetSubTree(trg) );
@@ -57,7 +69,7 @@ extern void DrawEta(const string& trg){
     SetHist( h, "#eta", "Efficiency");
     mgr::SetAxis( h );
    
-    TLegend* leg = mgr::NewLegend( 0.55, 0.2, 0.65, 0.3 );
+    TLegend* leg = mgr::NewLegend( 0.55, 0.2, 0.65, 0.33 );
     leg->SetLineColor( kWhite );
     
     for( const auto& ht : Hist("etaeff_"+trg) ){
@@ -77,8 +89,7 @@ extern void DrawEta(const string& trg){
     line->SetLineStyle( 8 );
     line->Draw();
 
-    //mgr::SaveToROOT( c, GetResultsName( "root", "eff"), "Eta_Eff_"+trg );
-    mgr::SaveToPDF( c, GetResultsName( "pdf", "Eta_Eff_"+trg ) );
+    mgr::SaveToPDF( c, PlotMgr().GetResultsName( "pdf", "Eta_Eff_"+trg ) );
     
     delete c;
     delete pt;
@@ -86,7 +97,7 @@ extern void DrawEta(const string& trg){
     delete leg;
 }
 
-extern void DrawPt(const string& trg){
+void DrawPt(const string& trg){
 
     string trgname = dra::GetSingle<string>("trgname", PlotMgr().GetSubTree(trg) );
     string cut     = dra::GetSingle<string>("ecut"   , PlotMgr().GetSubTree(trg) );
@@ -99,7 +110,7 @@ extern void DrawPt(const string& trg){
     SetHist( h, "P_{T}", "Efficiency");
     mgr::SetAxis( h );
     
-    TLegend* leg = mgr::NewLegend( 0.65, 0.3, 0.75, 0.4 );
+    TLegend* leg = mgr::NewLegend( 0.65, 0.27, 0.75, 0.4 );
     leg->SetLineColor( kWhite );
    
     for( const auto& ht : Hist("pteff_"+trg) ){
@@ -119,8 +130,7 @@ extern void DrawPt(const string& trg){
     line->SetLineStyle( 8 );
     line->Draw();
     
-    //mgr::SaveToROOT( c, GetResultsName( "root", "eff"), "Pt_Eff_"+trg );
-    mgr::SaveToPDF( c, GetResultsName( "pdf", "Pt_Eff_"+trg ) ); 
+    mgr::SaveToPDF( c, PlotMgr().GetResultsName( "pdf", "Pt_Eff_"+trg ) ); 
     
     delete c;
     delete pt;
@@ -128,17 +138,13 @@ extern void DrawPt(const string& trg){
     delete leg;
 }
 
-extern void SetHist(TH1* h, const string& xaxis, const string& yaxis){
+void SetHist(TH1* h, const string& xaxis, const string& yaxis){
  
     h->GetXaxis()->SetTitle(xaxis.c_str());
     h->GetYaxis()->SetTitle(yaxis.c_str());
 
-    h->SetMarkerStyle(21);
-    h->SetMarkerSize(0.6);
-    h->SetLineColor(kAzure - 3);
-    h->SetMarkerColor(kAzure - 3);
 }
 
-extern vector<TGraphAsymmErrors*> Hist(const string& name){
+vector<TGraphAsymmErrors*> Hist(const string& name){
     return PlotMgr().GetHist(name);
 }

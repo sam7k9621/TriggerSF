@@ -23,6 +23,9 @@ class HistMgr {
         std::string MakeAliasName(const std::string&);
         void SetLineColor( const Color_t );
         void CleanAll();
+        std::string GetTag() const {
+            return _tag;
+        }
 
     private:
         ObjContainer _objmap;

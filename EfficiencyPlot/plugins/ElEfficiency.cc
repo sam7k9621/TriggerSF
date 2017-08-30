@@ -1,5 +1,5 @@
 #include "TriggerEfficiency/EfficiencyPlot/interface/LepEfficiency.h"
-
+#include "TLorentzVector.h"
 using namespace std;
 
 
@@ -15,6 +15,8 @@ ElEfficiency::ElEfficiency( const edm::ParameterSet& iConfig ):
         string         triname = tagtri.getParameter<string>( "name" );
         vector<double> etabin  = tagtri.getParameter<vector<double>>( "etabin" );
         vector<double> ptbin   = tagtri.getParameter<vector<double>>( "ptbin" );
+        AddHist( "pass_zmass_" + triname, 80, 50, 130);
+        AddHist( "fail_zmass_" + triname, 80, 50, 130);
         AddHist( "total_pt_" + triname, ptbin );
         AddHist( "total_eta_" + triname, etabin );
         AddHist( "pass_pt_" + triname, ptbin );
@@ -36,6 +38,11 @@ ElEfficiency::analyze( const edm::Event& iEvent, const edm::EventSetup& iSetup )
     pat::Electron tag = ( *taghandle )[0];
     pat::Electron pro = ( *prohandle )[0];
 
+    TLorentzVector tagLV( tag.px(), tag.py(), tag.pz(), tag.energy() );
+    TLorentzVector proLV( pro.px(), pro.py(), pro.pz(), pro.energy() );
+    double zmass = (tagLV+proLV).M();
+
+
     for( int i = 0; i < ( int )_tagtri.size(); i++ ) {
         /****common setting****/
         string         triname = _tagtri[i].getParameter<string>( "name" );
@@ -56,6 +63,7 @@ ElEfficiency::analyze( const edm::Event& iEvent, const edm::EventSetup& iSetup )
         }
 
         /****setting for probe****/
+        bool passpro = false;
         hltlist = _protri[i].getParameter<vector<string>>( "HLT" );
         ptcut   = _protri[i].getParameter<double>( "ptcut" );
         etacut  = _protri[i].getParameter<double>( "etacut" );
@@ -70,6 +78,9 @@ ElEfficiency::analyze( const edm::Event& iEvent, const edm::EventSetup& iSetup )
 
         for( const auto& hlt : hltlist ) {
             if( pro.hasUserInt( hlt ) ) {
+
+                passpro = true;
+
                 if( fabs( pro.superCluster()->eta() ) < etacut ) {
                     Hist( "pass_pt_" + triname ) -> Fill( pro.pt() );
                 }
@@ -79,6 +90,11 @@ ElEfficiency::analyze( const edm::Event& iEvent, const edm::EventSetup& iSetup )
                 }
             }
         }
+    
+        if(passpro)
+            Hist( "pass_zmass_" + triname ) -> Fill(zmass);
+        else
+            Hist( "fail_zmass_" + triname ) -> Fill(zmass);
     }
 }
 

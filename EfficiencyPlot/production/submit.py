@@ -5,12 +5,12 @@ import sys
 import subprocess
 
 datalst = [
-        # 'file:/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/production/Tnp_2017_data_crab/crab_TnP_SingleElectron_Run2017B_PromptReco_v1_MINIAOD/results/',
-        'file:/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/production/Tnp_2017_data_crab/crab_TnP_SingleElectron_Run2017B_PromptReco_v2_MINIAOD/results/'
-        # 'file:/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/production/Tnp_2017_data_crab/crab_TnP_SingleElectron_Run2017C_PromptReco_v1_MINIAOD/results/',
-        # 'file:/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/production/Tnp_2017_data_crab/crab_TnP_SingleElectron_Run2017C_PromptReco_v2_MINIAOD/results/'
+        'file:/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/production/wrong_Tnp_2017_data_crab/crab_TnP_SingleElectron_Run2017B_PromptReco_v1_MINIAOD/results/',
+        'file:/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/production/wrong_Tnp_2017_data_crab/crab_TnP_SingleElectron_Run2017B_PromptReco_v2_MINIAOD/results/',
+        'file:/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/production/wrong_Tnp_2017_data_crab/crab_TnP_SingleElectron_Run2017C_PromptReco_v1_MINIAOD/results/',
+        'file:/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/production/wrong_Tnp_2017_data_crab/crab_TnP_SingleElectron_Run2017C_PromptReco_v2_MINIAOD/results/'
         ]
-datanum = [1540]
+datanum = [2321, 1540, 2471, 7946]
 
 qsub ="""
 #!/usr/bin/env sh

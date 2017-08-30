@@ -12,21 +12,24 @@
 #include <string>
 #include <vector>
 
+template<typename T>
 class TrgPlotMgr : public dra::Pathmgr, public dra::Readmgr, public dra::Parsermgr{
 
     public:
         TrgPlotMgr(const std::string&);
         ~TrgPlotMgr();
 
-        void initPlot();
         void SetColor();
-        std::vector<TGraphAsymmErrors*> GetHist(const std::string&);
-        
+        std::vector<T*> GetHist(const std::string&);
+        void AddPlot(const std::string&, T*);
+        std::string GetResultsName( const std::string&, const std::string&);
 
     private:
-        std::vector< HistMgr<TGraphAsymmErrors> > _histmgr;
+        std::vector< HistMgr<T> > _histmgr;
 
 
 };
+
+#include "TriggerEfficiency/EfficiencyPlot/src/TrgPlotMgr.ipp"
 
 #endif
