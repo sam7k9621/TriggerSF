@@ -49,8 +49,10 @@ print ">>Running with [ MC sample:{0} | {1} ] \n>>Dataset : {2}".format(options.
 
 process = cms.Process("TagAndProbe")
 process.load("FWCore.MessageService.MessageLogger_cfi")
-process.load("Configuration.StandardSequences.GeometryRecoDB_cff")
-process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
+process.load('Configuration.StandardSequences.GeometryDB_cff')
+process.load('Configuration.StandardSequences.MagneticField_38T_cff')
+process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
+
 
 process.MessageLogger.cerr.FwkReport.reportEvery = 100
 
@@ -58,7 +60,7 @@ if options.Debug :
     process.MessageLogger.cerr.FwkReport.reportEvery = 1
 
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc', '')
+process.GlobalTag = GlobalTag(process.GlobalTag, '92X_dataRun2_Prompt_v8', '')
 process.options = cms.untracked.PSet(wantSummary=cms.untracked.bool(True))
 
 #-------------------------------------------------------------------------------
