@@ -34,10 +34,10 @@ InitSetting()
 
         for( const auto& trg : PlotMgr().GetListData<string>( "trglst" ) ){
 
-            TH1D* passPt   = (TH1D*)file->Get( ( "pass_pt_" + trg ).c_str() );
-            TH1D* passEta  = (TH1D*)file->Get( ( "pass_eta_" + trg ).c_str() );
-            TH1D* totalPt  = (TH1D*)file->Get( ( "total_pt_" + trg ).c_str() );
-            TH1D* totalEta = (TH1D*)file->Get( ( "total_eta_" + trg ).c_str() );
+            TH1D* passPt   = (TH1D*)file->Get( ( "demo/pass_pt_" + trg ).c_str() );
+            TH1D* passEta  = (TH1D*)file->Get( ( "demo/pass_eta_" + trg ).c_str() );
+            TH1D* totalPt  = (TH1D*)file->Get( ( "demo/total_pt_" + trg ).c_str() );
+            TH1D* totalEta = (TH1D*)file->Get( ( "demo/total_eta_" + trg ).c_str() );
 
             TGraphAsymmErrors* peff = new TGraphAsymmErrors( passPt, totalPt, "b" );
             TGraphAsymmErrors* eeff = new TGraphAsymmErrors( passEta, totalEta, "b" );
@@ -80,7 +80,7 @@ DrawEta( const string& trg )
     SetHist( h, "#eta", "Efficiency" );
     mgr::SetAxis( h );
 
-    TLegend* leg = mgr::NewLegend( 0.55, 0.2, 0.65, 0.33 );
+    TLegend* leg = mgr::NewLegend( 0.55, 0.18, 0.65, 0.35 );
     leg->SetLineColor( kWhite );
 
     for( const auto& ht : Hist( "etaeff_" + trg ) ){
@@ -124,7 +124,7 @@ DrawPt( const string& trg )
     SetHist( h, "P_{T}", "Efficiency" );
     mgr::SetAxis( h );
 
-    TLegend* leg = mgr::NewLegend( 0.65, 0.27, 0.75, 0.4 );
+    TLegend* leg = mgr::NewLegend( 0.65, 0.23, 0.75, 0.4 );
     leg->SetLineColor( kWhite );
 
     for( const auto& ht : Hist( "pteff_" + trg ) ){

@@ -22,12 +22,13 @@ class HistMgr {
         T*          GetObj( const std::string& );
         const T*    GetObj( const std::string& ) const;
         std::string MakeAliasName( const std::string& );
-        void        SetLineColor( const Color_t );
+        void        SetLineColor( const Color_t& );
+        void        SetMarkerColor(const Color_t&);
+        void        SetMarkerStyle(const int&);
+        void        SetMarkerSize(const int&);
+        void        SetLineWidth(const int&);
         void        CleanAll();
-        std::string GetTag() const
-        {
-            return _tag;
-        }
+        std::string GetTag() const{ return _tag;}
 
     private:
 

@@ -84,8 +84,6 @@ class ElFltr : public edm::stream::EDFilter<> {
 
         /*------common tool------*/
         reco::VertexCollection _vtx;
-        pat::MuonCollection _muons;
-        pat::ElectronCollection _electrons;
 };
 
 

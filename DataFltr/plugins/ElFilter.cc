@@ -1,5 +1,7 @@
 #include "TriggerEfficiency/DataFltr/interface/ElFltr.h"
 
+#include <iostream>
+
 using namespace std;
 
 ElFltr::ElFltr( const edm::ParameterSet& iConfig ) :
@@ -44,36 +46,26 @@ ElFltr::filter( edm::Event& iEvent, const edm::EventSetup& iSetup )
     iEvent.getByToken( _tightMapToken,      _tightMapHandle );
     iEvent.getByToken( _heepMapToken,       _heepMapHandle );
 
-    // initialize the object by handle
-    if( _muhandle.isValid() ){
-        _muons = *_muhandle;
-    }
-
-    if( _elhandle.isValid() ){
-        _electrons = *_elhandle;
-    }
-
     if( _vtxhandle.isValid() ){
         _vtx = *_vtxhandle;
     }
 
     // no loose muons
-    for( const auto& mu : _muons ){
+    for( const auto& mu : *_muhandle ){
         if( mu.pt() > 8 ){
             return false;
         }
     }
 
     // pre-cut on electron pt
-    vector <int> eId;
     pat::ElectronCollection electrons;
+    vector<edm::Ptr<pat::Electron> > elptr;
 
-    for( int i = 0; i < (int)_electrons.size(); i++ ){
-        const edm::Ptr<pat::Electron> elptr( _elhandle, i );
+    for( auto it_el = _elhandle->begin(); it_el != _elhandle->end(); ++it_el ){
+        if( it_el->pt() > 8 ){
 
-        if( _electrons[ i ].pt() > 8 ){
-            electrons.push_back( _electrons[ i ] );
-            eId.push_back( i );// to store the original position in the handle
+            electrons.push_back( *it_el );
+            elptr.push_back( edm::Ptr<pat::Electron>( _elhandle, it_el - _elhandle->begin() ) );
         }
     }
 
@@ -85,9 +77,6 @@ ElFltr::filter( edm::Event& iEvent, const edm::EventSetup& iSetup )
     srand( (unsigned)time( NULL ) );
     int first  = rand() % 2;
     int second = ( first + 1 ) % 2;
-    // build the Ptr of tag&probe
-    const edm::Ptr<pat::Electron> tElptr( _elhandle, eId[ first ] );
-    const edm::Ptr<pat::Electron> pElptr( _elhandle, eId[ second ] );
 
     // confirm mother in z mass window
     if( !zParent( electrons ) ){
@@ -97,7 +86,7 @@ ElFltr::filter( edm::Event& iEvent, const edm::EventSetup& iSetup )
     // tag preselection
     if( !
         (
-            // passId( tElptr, _tagid) &&
+            passId( elptr[first], _tagid) &&
             passKin( electrons[ first ], true )
         )
         )
@@ -108,7 +97,7 @@ ElFltr::filter( edm::Event& iEvent, const edm::EventSetup& iSetup )
     // probe preselection
     if( !
         (
-            // passId( pElptr, _proid) &&
+            passId( elptr[second], _proid) &&
             passKin( electrons[ second ], false )
         )
         )

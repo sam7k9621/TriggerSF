@@ -29,16 +29,42 @@ electrontool = cms.PSet(
        cms.PSet(
            ptbin = cms.vdouble(10,20,25,30,35,36,37,38,39,40,41,42,43,44,45,50,60,200),
            etabin = cms.vdouble(-2.5, -2, -1.566, -1.444, -0.8 ,0, 0.8 ,1.444, 1.566, 2, 2.5),
-           HLT = cms.vstring("HLT_Ele40_WPTight_Gsf_v*"),
-           name = cms.string("ele40"),
-           ptcut = cms.double(45),
+           HLT = cms.vstring("HLT_Ele27_WPTight_Gsf_v*"),
+           name = cms.string("ele40_v27"),
+           ptcut = cms.double(35),
+           etacut = cms.double(100)
+           ),
+       cms.PSet(
+           ptbin = cms.vdouble(10,20,25,30,35,36,37,38,39,40,41,42,43,44,45,50,60,200),
+           etabin = cms.vdouble(-2.5, -2, -1.566, -1.444, -0.8 ,0, 0.8 ,1.444, 1.566, 2, 2.5),
+           HLT = cms.vstring("HLT_Ele35_WPTight_Gsf_v*"),
+           name = cms.string("ele40_v35"),
+           ptcut = cms.double(40),
+           etacut = cms.double(100)
+           ),
+       cms.PSet(
+           ptbin = cms.vdouble(10,20,25,30,35,36,37,38,39,40,41,42,43,44,45,50,60,200),
+           etabin = cms.vdouble(-2.5, -2, -1.566, -1.444, -0.8 ,0, 0.8 ,1.444, 1.566, 2, 2.5),
+           HLT = cms.vstring("HLT_Ele38_WPTight_Gsf_v*"),
+           name = cms.string("ele40_v38"),
+           ptcut = cms.double(43),
            etacut = cms.double(100)
            )
        ),
    protrigger = cms.VPSet(
        cms.PSet(
            HLT = cms.vstring("HLT_Ele40_WPTight_Gsf_v*"),
-           ptcut = cms.double(40),
+           ptcut = cms.double(45),
+           etacut = cms.double(100)
+           ),
+       cms.PSet(
+           HLT = cms.vstring("HLT_Ele40_WPTight_Gsf_v*"),
+           ptcut = cms.double(45),
+           etacut = cms.double(100)
+           ),
+       cms.PSet(
+           HLT = cms.vstring("HLT_Ele40_WPTight_Gsf_v*"),
+           ptcut = cms.double(45),
            etacut = cms.double(100)
            )
        )

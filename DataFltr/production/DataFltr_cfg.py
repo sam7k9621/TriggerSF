@@ -73,18 +73,19 @@ process.source = cms.Source("PoolSource",
         )
 
 ##Egamma
-if options.lepton == "electron":
-    from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
-    dataFormat = DataFormat.MiniAOD
-    switchOnVIDElectronIdProducer(process, dataFormat)
-    # define which IDs we want to produce
-    my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.cutBasedElectronHLTPreselecition_Summer16_V1_cff',
-                     'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Summer16_80X_V1_cff',
-                     'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV60_cff']
-    #add them to the VID producer
-    for idmod in my_id_modules:
-        setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
-    print '>>Finished Egamma settings'
+from PhysicsTools.PatAlgos.tools.coreTools import *
+from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
+dataFormat = DataFormat.MiniAOD
+switchOnVIDElectronIdProducer(process, dataFormat)
+# define which IDs we want to produce
+my_id_modules = [
+        'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Summer16_80X_V1_cff',
+        'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV60_cff'
+        ]
+#add them to the VID producer
+for idmod in my_id_modules:
+    setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
+print '>>Finished Egamma settings'
 ##
 
 print '>>Finished basic setups...'
@@ -99,7 +100,7 @@ if options.lepton == "electron":
             "ElFltr",
             commontool,
             electrontool,
-            useMC = cms.bool(options.useMC)  # Check whether lepton has gen level lepton and  whether tag and probe has MC truth Z parent 
+            useMC = cms.bool(options.useMC) # Check whether lepton has gen level lepton and  whether tag and probe has MC truth Z parent 
             )
 
 elif options.lepton == "muon":
@@ -111,6 +112,7 @@ elif options.lepton == "muon":
             )
 
 process.filterpath = cms.Path(
+        process.egmGsfElectronIDSequence*
         process.datafltr
         )
 

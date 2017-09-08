@@ -28,10 +28,14 @@ TrgPlotMgr<T>::~TrgPlotMgr(){
 template<typename T>
 void TrgPlotMgr<T>::SetColor(){
 
-    Color_t c[] = {kGreen-6, kAzure-3, kOrange+1, kRed-7, kMagenta+2, kGray+1};
-
+    Color_t c[]  = {kGreen-6, kAzure-3, kOrange+1, kRed-7, kMagenta+2, kGray+1};
+    int     ms[] = {33, 8, 21, 34, 22, 29};
     for(int i=0; i< (int)_histmgr.size();i++){
         _histmgr[i].SetLineColor(c[i]);
+        _histmgr[i].SetMarkerColor(c[i]);
+        _histmgr[i].SetMarkerStyle(ms[i]);
+        _histmgr[i].SetLineWidth(2);
+        _histmgr[i].SetMarkerSize(1);
     }
 }
 

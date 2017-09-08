@@ -84,9 +84,41 @@ HistMgr<T>::CleanAll(){
 
 template<typename T>
 void 
-HistMgr<T>::SetLineColor( const Color_t x){
+HistMgr<T>::SetLineColor( const Color_t& x){
     for(auto& h : _objmap){
         h.second->SetLineColor(x);
+    }
+}
+
+template<typename T>
+void 
+HistMgr<T>::SetMarkerColor( const Color_t& x){
+    for(auto& h : _objmap){
+        h.second->SetMarkerColor(x);
+    }
+}
+
+template<typename T>
+void 
+HistMgr<T>::SetMarkerStyle( const int& x){
+    for(auto& h : _objmap){
+        h.second->SetMarkerStyle(x);
+    }
+}
+
+template<typename T>
+void 
+HistMgr<T>::SetMarkerSize( const int& x){
+    for(auto& h : _objmap){
+        h.second->SetMarkerSize(x);
+    }
+}
+
+template<typename T>
+void 
+HistMgr<T>::SetLineWidth( const int& x){
+    for(auto& h : _objmap){
+        h.second->SetLineWidth(x);
     }
 }
 

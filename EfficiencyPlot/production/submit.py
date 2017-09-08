@@ -5,12 +5,12 @@ import sys
 import subprocess
 
 datalst = [
-        'file:/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/production/wrong_Tnp_2017_data_crab/crab_TnP_SingleElectron_Run2017B_PromptReco_v1_MINIAOD/results/',
-        'file:/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/production/wrong_Tnp_2017_data_crab/crab_TnP_SingleElectron_Run2017B_PromptReco_v2_MINIAOD/results/',
-        'file:/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/production/wrong_Tnp_2017_data_crab/crab_TnP_SingleElectron_Run2017C_PromptReco_v1_MINIAOD/results/',
-        'file:/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/production/wrong_Tnp_2017_data_crab/crab_TnP_SingleElectron_Run2017C_PromptReco_v2_MINIAOD/results/'
+        '/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/production/Tnp_2017_data_crab/crab_TnP_SingleElectron_Run2017B_PromptReco_v1_MINIAOD/results/',
+        '/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/production/Tnp_2017_data_crab/crab_TnP_SingleElectron_Run2017B_PromptReco_v2_MINIAOD/results/',
+        '/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/production/Tnp_2017_data_crab/crab_TnP_SingleElectron_Run2017C_PromptReco_v1_MINIAOD/results/',
+        '/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/production/Tnp_2017_data_crab/crab_TnP_SingleElectron_Run2017C_PromptReco_v2_MINIAOD/results/',
+        '/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/production/Tnp_2017_data_crab/crab_TnP_SingleElectron_Run2017C_PromptReco_v3_MINIAOD/results/'
         ]
-datanum = [2321, 1540, 2471, 7946]
 
 qsub ="""
 #!/usr/bin/env sh
@@ -28,19 +28,21 @@ def main(args):
 
     pos = "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/data/"
 
-    for index, data in enumerate(datalst) :
+    for data in datalst :
 
         outfile = data.split("/")[9].split("_")
         outfile = outfile[2] + "_" + outfile[3] + "_"  + outfile[5]
 
+        datanum = len( [ name for name in os.listdir(data) if ".root" in name ] )
+
         samplelst = []
-        for i in range(1,datanum[index]) :
+        for i in range(1, datanum+1) :
             sample = data + 'TnP_test_electron_{}.root'.format(i)
             samplelst.append(sample)
 
         inputfilelst = open( pos + outfile + ".txt" ,'w')
         for s in samplelst :
-            inputfilelst.write( s +"\n" )
+            inputfilelst.write( "file:" + s +"\n" )
         inputfilelst.close()
 
         output = open( ".sentJob.sh", 'w' )

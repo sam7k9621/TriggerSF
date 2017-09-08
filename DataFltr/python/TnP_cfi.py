@@ -23,7 +23,15 @@ electrontool = cms.PSet(
                 FilterName = cms.string("hltEle40noerWPTightGsfTrackIsoFilter")
             ),
             cms.PSet(
-                HLTName = cms.string("HLT_Ele27_WPTight_Gsf*"),
+                HLTName = cms.string("HLT_Ele35_WPTight_Gsf_v*"),
+                FilterName = cms.string("hltEle35noerWPTightGsfTrackIsoFilter")
+            ),
+            cms.PSet(
+                HLTName = cms.string("HLT_Ele38_WPTight_Gsf_v*"),
+                FilterName = cms.string("hltEle38noerWPTightGsfTrackIsoFilter")
+            ),
+            cms.PSet(
+                HLTName = cms.string("HLT_Ele27_WPTight_Gsf_v*"),
                 FilterName = cms.string("hltEle27WPTightGsfTrackIsoFilter")
             )
         ),
@@ -37,10 +45,10 @@ electrontool = cms.PSet(
         probeImpact = cms.bool(True),
 
         #https://twiki.cern.ch/twiki/bin/view/CMS/CutBasedElectronIdentificationRun2#Recipe80X
-        looseMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-loose"),
+        looseMap = cms.InputTag ("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-loose"),
         mediumMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-medium"),
-        tightMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-tight"),
-        heepMap = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV60"),
+        tightMap = cms.InputTag ("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-tight"),
+        heepMap = cms.InputTag  ("egmGsfElectronIDs:heepElectronID-HEEPV60"),
 
         #customized cut
         tagPtMin = cms.double(30),
@@ -62,12 +70,12 @@ muontool = cms.PSet(
 
         #https://twiki.cern.ch/twiki/bin/view/CMS/SWGuideMuonIdRun2#Tight_Muon
         #tag criteria
-        TagPassID  = cms.string("tight"),       #Require tag muon to pass a ID ( input will be "loose"/"tight"/"HighPT" )
+        TagPassID  = cms.string("loose"),       #Require tag muon to pass a ID ( input will be "loose"/"tight"/"HighPT" )
         TagPassPFIso = cms.double(0.15),        #Require tag muon to pass tight particle flow isolation cut
         TagPassTKIso = cms.double(0.05),        #Require tag muon to pass tight tracking isolation cut
 
         #probe criteria
-        ProbePassID  = cms.string("tight"),     #Require probe muon to pass a ID ( input will be "loose"/"tight"/"HighPT" )
+        ProbePassID  = cms.string("loose"),     #Require probe muon to pass a ID ( input will be "loose"/"tight"/"HighPT" )
         ProbePassPFIso = cms.double(0.15),      #Require probe muon to pass tight particle flow isolation cut
         ProbePassTKIso = cms.double(0.05),      #Require probe muon to pass tight tracking isolation cut
 

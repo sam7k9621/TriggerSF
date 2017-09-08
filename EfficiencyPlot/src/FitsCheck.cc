@@ -28,8 +28,8 @@ InitSetting_fit()
 
         for( const auto& trg : FitsMgr().GetListData<string>( "trglst" ) ){
 
-            TH1D* passZ = (TH1D*)file->Get( ( "demo/pass_zmass" + trg ).c_str() );
-            TH1D* failZ = (TH1D*)file->Get( ( "demo/fail_zmass" + trg ).c_str() );
+            TH1D* passZ = (TH1D*)file->Get( ( "demo/pass_zmass_" + trg ).c_str() );
+            TH1D* failZ = (TH1D*)file->Get( ( "demo/fail_zmass_" + trg ).c_str() );
 
             passZ->SetDirectory( 0 );
             failZ->SetDirectory( 0 );
@@ -67,14 +67,15 @@ DrawFitsFail( const string& trg )
     TCanvas* c = mgr::NewCanvas();
     mgr::SetSinglePad( c );
 
-    TLegend* leg = mgr::NewLegend( 0.65, 0.27, 0.75, 0.4 );
+    TLegend* leg = mgr::NewLegend( 0.65, 0.23, 0.75, 0.4 );
     leg->SetLineColor( kWhite );
+    leg->SetHeader("Fail Z Dist.","C");
 
     double ymax = mgr::GetYmax( HIST( "fail_zmass_" + trg ) );
     TH1F* h     = gPad->DrawFrame( 50, 0, 130, ymax * 1.6 );
     h->SetTitle( "" );
     h->GetXaxis()->SetTitle( "GeV" );
-    h->GetYaxis()->SetTitle( "Event" );
+    h->GetYaxis()->SetTitle( "Event x10^{3}" );
     mgr::SetAxis( h );
 
     for( auto& f : HIST( "fail_zmass_" + trg ) ){
@@ -88,6 +89,8 @@ DrawFitsFail( const string& trg )
     TPaveText* pt = mgr::NewTextBox( .55, .81, .93, .87 );
     pt->AddText( ( trgname ).c_str() );
     pt->Draw();
+
+    cout<<endl<<trg<<" fail peak "<<ymax<<endl;
 
     mgr::SaveToPDF( c, FitsMgr().GetResultsName( "pdf", "zmass_fail_" + trg ) );
 
@@ -105,14 +108,15 @@ DrawFitsPass( const string& trg )
     TCanvas* c = mgr::NewCanvas();
     mgr::SetSinglePad( c );
 
-    TLegend* leg = mgr::NewLegend( 0.65, 0.27, 0.75, 0.4 );
+    TLegend* leg = mgr::NewLegend( 0.65, 0.23, 0.75, 0.4 );
     leg->SetLineColor( kWhite );
+    leg->SetHeader("Pass Z Dist.","C");
 
     double ymax = mgr::GetYmax( HIST( "pass_zmass_" + trg ) );
     TH1F* h     = gPad->DrawFrame( 50, 0, 130, ymax * 1.6 );
     h->SetTitle( "" );
     h->GetXaxis()->SetTitle( "GeV" );
-    h->GetYaxis()->SetTitle( "Event" );
+    h->GetYaxis()->SetTitle( "Event x10^{3}" );
     mgr::SetAxis( h );
 
     for( auto& f : HIST( "pass_zmass_" + trg ) ){
@@ -127,6 +131,8 @@ DrawFitsPass( const string& trg )
     pt->AddText( ( trgname ).c_str() );
     pt->Draw();
 
+    cout<<endl<<trg<<" pass peak "<<ymax<<endl;
+    
     mgr::SaveToPDF( c, FitsMgr().GetResultsName( "pdf", "zmass_pass_" + trg ) );
 
     delete c;

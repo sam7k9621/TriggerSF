@@ -68,18 +68,20 @@ ElFltr::passKin( const pat::Electron& el, const bool& isTag ) const
 bool
 ElFltr::passId( const edm::Ptr<pat::Electron>& elptr, const string& level )
 {
+    
     if( level == "loose" ){
-        return ( *_looseMapHandle )[ elptr ];
+        return ( *_looseMapHandle )[ elptr ] ;
     }
     else if( level == "medium" ){
-        return ( *_mediumMapHandle )[ elptr ];
+        return ( *_mediumMapHandle )[ elptr ] ;
     }
     else if( level == "tight" ){
-        return ( *_tightMapHandle )[ elptr ];
+        return ( *_tightMapHandle )[ elptr ] ;
     }
     else{
-        return ( *_heepMapHandle )[ elptr ];
+        return ( *_heepMapHandle )[ elptr ] ;
     }
+
 }
 
 // https://twiki.cern.ch/twiki/bin/view/CMS/CutBasedElectronIdentificationRun2#Recipe80X
