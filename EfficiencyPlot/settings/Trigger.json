@@ -1,12 +1,18 @@
 {
-    "trglst" : ["ele40_v27", "ele40_v35", "ele40_v38"],
-    "verlst" : ["Bv1","Bv2","Cv1","Cv2","Cv3"],
+    "trglst" : ["ele40_v38"],
+    "verlst" : ["Dv1", "Ev1"],
 
-    "Bv1" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/data/SingleElectron_Run2017B_v1.root",
-    "Bv2" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/data/SingleElectron_Run2017B_v2.root",
-    "Cv1" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/data/SingleElectron_Run2017C_v1.root",
-    "Cv2" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/data/SingleElectron_Run2017C_v2.root",
-    "Cv3" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/data/SingleElectron_Run2017C_v3.root",
+    "HLTv1" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/data/SingleElectron_HLTv1.root",
+    "HLTv2" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/data/SingleElectron_HLTv2.root",
+    "HLTv3" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/data/SingleElectron_HLTv3.root",
+
+    "Bv1" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/data/_SingleElectron_Run2017B_v1_golden.root",
+    "Bv2" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/data/_SingleElectron_Run2017B_v2_golden.root",
+    "Cv1" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/data/_SingleElectron_Run2017C_v1_golden.root",
+    "Cv2" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/data/_SingleElectron_Run2017C_v2_golden.root",
+    "Cv3" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/data/_SingleElectron_Run2017C_v3_golden.root",
+    "Dv1" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/data/_SingleElectron_Run2017D_v1_golden.root",
+    "Ev1" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/data/_SingleElectron_Run2017E_v1_golden.root",
 
     "ele40_v27":{
         "trgname" : "HLT_Ele40_WPTight_Gsf_v*",
@@ -25,5 +31,4 @@
         "ecut" : "",
         "pcut" : " (P_{T} > 45)"
     }
-
 }

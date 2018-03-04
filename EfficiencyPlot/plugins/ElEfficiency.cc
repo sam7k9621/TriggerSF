@@ -65,7 +65,6 @@ ElEfficiency::analyze( const edm::Event& iEvent, const edm::EventSetup& iSetup )
         }
 
         /****setting for probe****/
-        bool passpro = false;
         hltlist = _protri[ i ].getParameter<vector<string> >( "HLT" );
         ptcut   = _protri[ i ].getParameter<double>( "ptcut" );
         etacut  = _protri[ i ].getParameter<double>( "etacut" );
@@ -81,8 +80,6 @@ ElEfficiency::analyze( const edm::Event& iEvent, const edm::EventSetup& iSetup )
         for( const auto& hlt : hltlist ){
             if( pro.hasUserInt( hlt ) ){
 
-                passpro = true;
-
                 if( fabs( pro.superCluster()->eta() ) < etacut ){
                     Hist( "pass_pt_" + triname )->Fill( pro.pt() );
                 }
@@ -93,12 +90,22 @@ ElEfficiency::analyze( const edm::Event& iEvent, const edm::EventSetup& iSetup )
             }
         }
 
-        if( passpro ){
-            Hist( "pass_zmass_" + triname )->Fill( zmass );
+        //check Z backgorund
+        
+        if( fabs( pro.superCluster()->eta() ) < etacut && pro.pt() > ptcut){
+
+            for( const auto& hlt : hltlist ){
+                if( pro.hasUserInt( hlt ) ){
+                    Hist( "pass_zmass_" + triname )->Fill( zmass );
+                }
+
+                else{
+                    Hist( "fail_zmass_" + triname )->Fill( zmass );
+                }
+            }
+
         }
-        else{
-            Hist( "fail_zmass_" + triname )->Fill( zmass );
-        }
+        
     }
 }
 

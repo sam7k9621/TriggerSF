@@ -43,7 +43,7 @@ electrontool = cms.PSet(
            etacut = cms.double(100)
            ),
        cms.PSet(
-           ptbin = cms.vdouble(10,20,25,30,35,36,37,38,39,40,41,42,43,44,45,50,60,200),
+           ptbin = cms.vdouble(10,20,25,30,35,36,37,38,39,40,41,42,43,44,45,50,60,70,80,100,150,200),
            etabin = cms.vdouble(-2.5, -2, -1.566, -1.444, -0.8 ,0, 0.8 ,1.444, 1.566, 2, 2.5),
            HLT = cms.vstring("HLT_Ele38_WPTight_Gsf_v*"),
            name = cms.string("ele40_v38"),

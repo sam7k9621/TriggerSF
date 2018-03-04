@@ -3,13 +3,16 @@
 import os
 import sys
 import subprocess
+import argparse
 
 datalst = [
         '/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/production/Tnp_2017_data_crab/crab_TnP_SingleElectron_Run2017B_PromptReco_v1_MINIAOD/results/',
         '/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/production/Tnp_2017_data_crab/crab_TnP_SingleElectron_Run2017B_PromptReco_v2_MINIAOD/results/',
         '/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/production/Tnp_2017_data_crab/crab_TnP_SingleElectron_Run2017C_PromptReco_v1_MINIAOD/results/',
         '/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/production/Tnp_2017_data_crab/crab_TnP_SingleElectron_Run2017C_PromptReco_v2_MINIAOD/results/',
-        '/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/production/Tnp_2017_data_crab/crab_TnP_SingleElectron_Run2017C_PromptReco_v3_MINIAOD/results/'
+        '/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/production/Tnp_2017_data_crab/crab_TnP_SingleElectron_Run2017C_PromptReco_v3_MINIAOD/results/',
+        '/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/production/Tnp_2017_data_crab/crab_TnP_SingleElectron_Run2017D_PromptReco_v1_MINIAOD/results/',
+        '/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/production/Tnp_2017_data_crab/crab_TnP_SingleElectron_Run2017E_PromptReco_v1_MINIAOD/results/'
         ]
 
 qsub ="""
@@ -21,17 +24,40 @@ qsub ="""
 #PBS -o /wk_cms/sam7k9621/qsub/oMESSAGE
 #PBS -e /wk_cms/sam7k9621/qsub/eMESSAGE
 cd /wk_cms2/sam7k9621/CMSSW_9_2_8/src && eval `scramv1 runtime -sh`
-cmsRun /wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/production/EffPlot_cfg.py inputFiles_load={0} output={1}
+cmsRun /wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/production/EffPlot_cfg.py inputFiles_load={0} output={1} version={2}
 """
 
 def main(args):
+
+    parser = argparse.ArgumentParser(
+            "Options to decide to use which HLT menu version"
+            )
+
+    parser.add_argument(
+            '-v', '--version',
+            help='which trigger menu version',
+            type=str, default=None, required=True
+            )
+
+    parser.add_argument(
+            '-s', '--tag',
+            help='add outputfile tag',
+            type=str, default=''
+            )
+    try:
+        opt = parser.parse_args(args[1:])
+    except:
+        print "Error processing arguments!"
+        parser.print_help()
+        raise
+
 
     pos = "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/data/"
 
     for data in datalst :
 
         outfile = data.split("/")[9].split("_")
-        outfile = outfile[2] + "_" + outfile[3] + "_"  + outfile[5]
+        outfile = opt.tag + '_' + outfile[2] + "_" + outfile[3] + "_"  + outfile[5] + "_" + opt.version
 
         datanum = len( [ name for name in os.listdir(data) if ".root" in name ] )
 
@@ -46,7 +72,7 @@ def main(args):
         inputfilelst.close()
 
         output = open( ".sentJob.sh", 'w' )
-        output.write( qsub.format( pos + outfile+ ".txt", pos + outfile+".root" ) )
+        output.write( qsub.format( pos + outfile+ ".txt", pos + outfile + ".root", opt.version + '.txt' ) )
         output.close()
 
 

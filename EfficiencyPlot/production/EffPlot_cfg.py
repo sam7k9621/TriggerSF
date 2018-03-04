@@ -31,6 +31,12 @@ options.register('lepton',
     opts.VarParsing.varType.string,
     'Which lepton')
 
+options.register('version',
+    "",
+    opts.VarParsing.multiplicity.singleton,
+    opts.VarParsing.varType.string,
+    'Which version HLT menu')
+
 options.register('Debug',
      0,
      opts.VarParsing.multiplicity.singleton,
@@ -67,7 +73,7 @@ print '>>Finished basic setups...'
 
 if not options.useMC :
     import FWCore.PythonUtilities.LumiList as LumiList
-    process.source.lumisToProcess = LumiList.LumiList(filename = '/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/test/golden.txt').getVLuminosityBlockRange()
+    process.source.lumisToProcess = LumiList.LumiList(filename = '/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/test/'+options.version).getVLuminosityBlockRange()
     print ">>Finished apply lumi mask"
 
 #-------------------------------------------------------------------------------
