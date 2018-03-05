@@ -84,6 +84,7 @@ class ElFltr : public edm::stream::EDFilter<> {
 
         /*------common tool------*/
         reco::VertexCollection _vtx;
+        const reco::Candidate* GetDirectMother( const reco::Candidate*, int );
 };
 
 

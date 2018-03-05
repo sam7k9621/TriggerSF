@@ -1,5 +1,8 @@
 #include "TLorentzVector.h"
 #include "TriggerEfficiency/DataFltr/interface/ElFltr.h"
+#include "DataFormats/Candidate/interface/Candidate.h"
+#include <queue>
+
 using namespace std;
 
 
@@ -108,4 +111,28 @@ ElFltr::passImpact( const pat::Electron& el ) const
     }
 
     return false;
+}
+
+const reco::Candidate*
+ElFltr::GetDirectMother( const reco::Candidate* x, int target_ID )
+{
+   queue<const reco::Candidate*> bfs_queue;
+   bfs_queue.push( x );
+
+   while( !bfs_queue.empty() ){
+      const reco::Candidate* temp = bfs_queue.front();
+      bfs_queue.pop();
+      if( abs( temp->pdgId() ) == abs( target_ID ) ){
+         return temp;
+      }
+
+      for( unsigned i = 0; i < temp->numberOfMothers(); ++i ){
+         if( temp->mother( i )->pdgId() == temp->pdgId() ){
+            bfs_queue.push( temp->mother( i ) );
+         } else if( abs( temp->mother( i )->pdgId() ) == abs( target_ID ) ){
+            return temp->mother( i );
+         }
+      }
+   }
+   return NULL;
 }

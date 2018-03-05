@@ -118,7 +118,11 @@ ElFltr::filter( edm::Event& iEvent, const edm::EventSetup& iSetup )
     }
 
     if( _useMC ){
-        cout << "useMC" << endl;
+        if( electrons[ first ].genLepton()== NULL || electrons[ second ].genLepton()== NULL)
+            return false;
+
+        if( !( GetDirectMother( electrons[ first ].genLepton(), 23 ) == GetDirectMother( electrons[ second ].genLepton(), 23 ) ) )
+            return false;
     }
 
     // to mark the electron that pass the criteria
