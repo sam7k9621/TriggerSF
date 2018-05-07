@@ -17,19 +17,19 @@ config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'DataFltr_cfg.py'
 ## Input parameters
 config.JobType.pyCfgParams = [
-   'useMC=False',
-   'lepton={1}',
+   'useMC={1}',
+   'lepton={2}',
    'Debug=1'
    ]
 config.JobType.maxMemoryMB      = 2000 # Requesting slightly more memory
 config.JobType.maxJobRuntimeMin = 2000 # Requesting slightly more runtime
-config.Data.inputDataset  = '{2}'
+config.Data.inputDataset  = '{3}'
 config.Data.inputDBS      = 'global'
-config.Data.splitting     = '{3}'
-config.Data.unitsPerJob   = {4}
-config.Data.outLFNDirBase = '{5}'
-config.Data.outputDatasetTag = '{6}'
-config.Site.storageSite = '{7}'
+config.Data.splitting     = '{4}'
+config.Data.unitsPerJob   = {5}
+config.Data.outLFNDirBase = '{6}'
+config.Data.outputDatasetTag = '{7}'
+config.Site.storageSite = '{8}'
 """
 
 import argparse
@@ -46,6 +46,7 @@ def submitsample(argv):
     parser.add_argument('-l', '--lepton'      , help='which lepton using'  , type=str, default=None, required=True)
     parser.add_argument('-n', '--jobnumber'   , help='unitsPerJob'         , type=str, default='1')
     parser.add_argument('-m', '--useMC'       , action='store_true')
+    parser.add_argument('-t', '--dryrun'      , action='store_true')
 
     try:
         opt = parser.parse_args()
@@ -56,6 +57,7 @@ def submitsample(argv):
 
     content = crabcfgformat.format(
         nametool.requestName( opt.inputdataset, opt.useMC),
+        opt.useMC,
         opt.lepton,
         opt.inputdataset,
         nametool.splitbase(opt.useMC),
@@ -73,8 +75,11 @@ def submitsample(argv):
     cfgfile.write(content)
     cfgfile.close()
 
-    os.system('source /cvmfs/cms.cern.ch/crab3/crab.sh')
-    os.system('crab submit ' +filename)
+    if opt.dryrun :
+        os.system('crab submit -c ' + filename + ' --dryrun')
+
+    # os.system('source /cvmfs/cms.cern.ch/crab3/crab.sh')
+    # os.system('crab submit ' +filename)
 
 
 if __name__ == '__main__':

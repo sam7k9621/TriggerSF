@@ -6,4 +6,3 @@
 <use name="DataFormats/FWLite"/>
 
 <bin name="ploteff"    file="PlotEfficiency.cc"/>
-<bin name="checkfits"  file="CheckFits.cc"/>

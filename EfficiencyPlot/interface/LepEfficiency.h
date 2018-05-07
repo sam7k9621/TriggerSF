@@ -1,3 +1,6 @@
+#ifndef LEPEFFICIENCY_H
+#define LEPEFFICIENCY_H
+
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
@@ -13,9 +16,12 @@
 #include "FWCore/ServiceRegistry/interface/Service.h"
 
 #include "TH1.h"
+#include "TH2.h"
+#include "TEfficiency.h"
 #include "TriggerEfficiency/EfficiencyPlot/interface/HistMgr.h"
 
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 
@@ -29,75 +35,53 @@ class LepEfficiency {
         // https://kheresy.wordpress.com/2014/10/03/override-and-final-in-cpp-11/
         // only virtual funciton can has final specifier ( just to avoid overriding by child class )
         virtual void AddHist(
-            const std::string& title,
-            const int &        bin_size,
-            const double &     x_lower,
-            const double &     x_upper
-            ) final
-        {
-            TH1D* h = fs->make<TH1D>( title.c_str(), title.c_str(), bin_size, x_lower, x_upper );
-            _histmgr.AddObj( h );
-        }
+            const std::string&, 
+            const int &,        
+            const double&,     
+            const double&     
+            ) final ;
 
-        virtual void AddHist( const std::string& title, const std::vector<double>& lst ) final
-        {
-            TH1D* h = fs->make<TH1D>( title.c_str(), title.c_str(), lst.size() - 1, &( lst[ 0 ] ) );
-            _histmgr.AddObj( h );
-        }
+        /******************************************************************************************************/
+        virtual void AddHist( 
+                const std::string&, 
+                const std::vector<double>& 
+                ) final;
 
-        virtual TH1* Hist( const std::string& name ) final
-        {
-            return _histmgr.GetObj( name );
-        }
+        virtual TH1* Hist( const std::string&) final;
+        
+        /******************************************************************************************************/
+        virtual void Add2DHist( 
+                const std::string&, 
+                const std::vector<double>&, 
+                const std::vector<double>& 
+                ) final;
 
+        virtual TH2* Hist2D( const std::string&) final;
+        
+        /******************************************************************************************************/
+        virtual void Add2DTEff( 
+                const std::string&, 
+                const std::vector<double>&, 
+                const std::vector<double>&
+                ) final;
+        
+        virtual void AddTEff( 
+                const std::string&, 
+                const std::vector<double>&
+                ) final;
+        
+        virtual TEfficiency* HistTEff( const std::string&) final;
+
+        /******************************************************************************************************/
+        virtual std::vector<double> ReadWeight(const string& filename) final ;
+    
     private:
 
         edm::Service<TFileService> fs;
+        HistMgr<TEfficiency> _teffmgr;
         HistMgr<TH1D> _histmgr;
+        HistMgr<TH2D> _hist2Dmgr;
         int* a;
 
 };
-
-class MuEfficiency : public edm::one::EDAnalyzer<edm::one::SharedResources>,
-                     public LepEfficiency  {
-    public:
-
-        MuEfficiency( const edm::ParameterSet& );
-        ~MuEfficiency();
-
-        static void fillDescriptions( edm::ConfigurationDescriptions& descriptions );
-
-    private:
-
-        virtual void beginJob() override;
-        virtual void analyze( const edm::Event&, const edm::EventSetup& ) override;
-        virtual void endJob() override;
-
-        // ----------member data ---------------------------
-        std::vector<edm::ParameterSet> _tagtri;
-        std::vector<edm::ParameterSet> _protri;
-        const edm::EDGetToken _pro;
-        const edm::EDGetToken _tag;
-};
-
-
-class ElEfficiency : public edm::one::EDAnalyzer<edm::one::SharedResources>,
-                     public LepEfficiency  {
-    public:
-
-        explicit ElEfficiency( const edm::ParameterSet& );
-        ~ElEfficiency();
-
-        static void fillDescriptions( edm::ConfigurationDescriptions& descriptions );
-
-    private:
-
-        virtual void beginJob() override;
-        virtual void analyze( const edm::Event&, const edm::EventSetup& ) override;
-        virtual void endJob() override;
-
-        std::vector<edm::ParameterSet> _tagtri;
-        std::vector<edm::ParameterSet> _protri;
-        const edm::EDGetToken _pro;
-        const edm::EDGetToken _tag;
-};
+#endif

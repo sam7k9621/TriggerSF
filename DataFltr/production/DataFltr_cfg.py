@@ -8,7 +8,7 @@ import FWCore.ParameterSet.Config as cms
 options = opts.VarParsing ('analysis')
 
 options.register('sample',
-    'file:/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/DataFltr/test/test_electron.root',
+    'file:/wk_cms2/sam7k9621/CMSSW_9_4_0_patch1/src/TriggerEfficiency/DataFltr/test/test.root',
     opts.VarParsing.multiplicity.list,
     opts.VarParsing.varType.string,
     'Sample to analyze')
@@ -60,7 +60,10 @@ if options.Debug :
     process.MessageLogger.cerr.FwkReport.reportEvery = 1
 
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, '92X_dataRun2_Prompt_v8', '')
+if options.useMC :
+    process.GlobalTag = GlobalTag(process.GlobalTag, "94X_mc2017_realistic_v10", '')
+else:
+    process.GlobalTag = GlobalTag(process.GlobalTag, "94X_dataRun2_ReReco17_forValidation", '')
 process.options = cms.untracked.PSet(wantSummary=cms.untracked.bool(True))
 
 #-------------------------------------------------------------------------------
@@ -79,7 +82,7 @@ dataFormat = DataFormat.MiniAOD
 switchOnVIDElectronIdProducer(process, dataFormat)
 # define which IDs we want to produce
 my_id_modules = [
-        'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Summer16_80X_V1_cff',
+        'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Fall17_94X_V1_cff',
         'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV60_cff'
         ]
 #add them to the VID producer

@@ -23,16 +23,24 @@ electrontool = cms.PSet(
                 FilterName = cms.string("hltEle40noerWPTightGsfTrackIsoFilter")
             ),
             cms.PSet(
-                HLTName = cms.string("HLT_Ele35_WPTight_Gsf_v*"),
-                FilterName = cms.string("hltEle35noerWPTightGsfTrackIsoFilter")
-            ),
-            cms.PSet(
                 HLTName = cms.string("HLT_Ele38_WPTight_Gsf_v*"),
                 FilterName = cms.string("hltEle38noerWPTightGsfTrackIsoFilter")
             ),
             cms.PSet(
+                HLTName = cms.string("HLT_Ele35_WPTight_Gsf_v*"),
+                FilterName = cms.string("hltEle35noerWPTightGsfTrackIsoFilter")
+            ),
+            cms.PSet(
+                HLTName = cms.string("HLT_Ele32_WPTight_Gsf_v*"),
+                FilterName = cms.string("hltEle32WPTightGsfTrackIsoFilter")
+            ),
+            cms.PSet(
                 HLTName = cms.string("HLT_Ele27_WPTight_Gsf_v*"),
                 FilterName = cms.string("hltEle27WPTightGsfTrackIsoFilter")
+            ),
+            cms.PSet(
+                HLTName = cms.string("HLT_Photon200"),
+                FilterName = cms.string("hltEG200HEFilter")
             )
         ),
 
@@ -45,9 +53,9 @@ electrontool = cms.PSet(
         probeImpact = cms.bool(True),
 
         #https://twiki.cern.ch/twiki/bin/view/CMS/CutBasedElectronIdentificationRun2#Recipe80X
-        looseMap = cms.InputTag ("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-loose"),
-        mediumMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-medium"),
-        tightMap = cms.InputTag ("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-tight"),
+        looseMap = cms.InputTag ("egmGsfElectronIDs:cutBasedElectronID-Fall17-94X-V1-loose"),
+        mediumMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Fall17-94X-V1-medium"),
+        tightMap = cms.InputTag ("egmGsfElectronIDs:cutBasedElectronID-Fall17-94X-V1-tight"),
         heepMap = cms.InputTag  ("egmGsfElectronIDs:heepElectronID-HEEPV60"),
 
         #customized cut

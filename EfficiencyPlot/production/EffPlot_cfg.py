@@ -7,12 +7,6 @@ import FWCore.ParameterSet.VarParsing as opts
 
 options = opts.VarParsing ('analysis')
 
-options.register('sample',
-    'file:/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/test/TnP_test_electron.root',
-    opts.VarParsing.multiplicity.list,
-    opts.VarParsing.varType.string,
-    'Sample to analyze')
-
 options.register('output',
     'Efficiency_test_electron.root',
     opts.VarParsing.multiplicity.singleton,
@@ -30,12 +24,6 @@ options.register('lepton',
     opts.VarParsing.multiplicity.singleton,
     opts.VarParsing.varType.string,
     'Which lepton')
-
-options.register('version',
-    "",
-    opts.VarParsing.multiplicity.singleton,
-    opts.VarParsing.varType.string,
-    'Which version HLT menu')
 
 options.register('Debug',
      0,
@@ -73,7 +61,7 @@ print '>>Finished basic setups...'
 
 if not options.useMC :
     import FWCore.PythonUtilities.LumiList as LumiList
-    process.source.lumisToProcess = LumiList.LumiList(filename = '/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/test/'+options.version).getVLuminosityBlockRange()
+    process.source.lumisToProcess = LumiList.LumiList(filename = '/wk_cms2/sam7k9621/CMSSW_9_4_0_patch1/src/TriggerEfficiency/EfficiencyPlot/test/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt').getVLuminosityBlockRange()
     print ">>Finished apply lumi mask"
 
 #-------------------------------------------------------------------------------
@@ -86,13 +74,17 @@ if options.lepton == "electron":
     process.demo = cms.EDAnalyzer(
             "ElEfficiency",
             electrontool,
-            useMC = cms.bool(options.useMC)
+            useMC = cms.bool(options.useMC),
+            pusrc = cms.InputTag("slimmedAddPileupInfo"),
+            filename = cms.FileInPath("TriggerEfficiency/EfficiencyPlot/test/pileupweights_69200.csv")
             )
 elif options.lepton == "muon":
     process.demo = cms.EDAnalyzer(
             "MuEfficiency",
             muontool,
-            useMC = cms.bool(options.useMC)
+            useMC = cms.bool(options.useMC),
+            pusrc = cms.InputTag("slimmedAddPileupInfo"),
+            filename = cms.FileInPath("TriggerEfficiency/EfficiencyPlot/test/pileupweights_69200.csv")
             )
 
 process.TFileService = cms.Service("TFileService",

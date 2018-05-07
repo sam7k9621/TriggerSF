@@ -1,18 +1,20 @@
 {
-    "trglst" : ["ele40_v38"],
-    "verlst" : ["Dv1", "Ev1"],
+    "trglst"  : ["ele40_v38"],
+    "datalst" : [
+        "Bv1",
+        "Cv1",
+        "Dv1",
+        "Ev1",
+        "Fv1"
+            ],
 
-    "HLTv1" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/data/SingleElectron_HLTv1.root",
-    "HLTv2" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/data/SingleElectron_HLTv2.root",
-    "HLTv3" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/data/SingleElectron_HLTv3.root",
-
-    "Bv1" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/data/_SingleElectron_Run2017B_v1_golden.root",
-    "Bv2" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/data/_SingleElectron_Run2017B_v2_golden.root",
-    "Cv1" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/data/_SingleElectron_Run2017C_v1_golden.root",
-    "Cv2" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/data/_SingleElectron_Run2017C_v2_golden.root",
-    "Cv3" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/data/_SingleElectron_Run2017C_v3_golden.root",
-    "Dv1" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/data/_SingleElectron_Run2017D_v1_golden.root",
-    "Ev1" : "/wk_cms2/sam7k9621/CMSSW_9_2_8/src/TriggerEfficiency/EfficiencyPlot/data/_SingleElectron_Run2017E_v1_golden.root",
+    "Bv1" : "/wk_cms2/sam7k9621/CMSSW_9_4_0_patch1/src/TriggerEfficiency/EfficiencyPlot/data/TnP_SingleElectron_Run2017B_v1_*.root",
+    "Cv1" : "/wk_cms2/sam7k9621/CMSSW_9_4_0_patch1/src/TriggerEfficiency/EfficiencyPlot/data/TnP_SingleElectron_Run2017C_v1_*.root",
+    "Dv1" : "/wk_cms2/sam7k9621/CMSSW_9_4_0_patch1/src/TriggerEfficiency/EfficiencyPlot/data/TnP_SingleElectron_Run2017D_v1_*.root",
+    "Ev1" : "/wk_cms2/sam7k9621/CMSSW_9_4_0_patch1/src/TriggerEfficiency/EfficiencyPlot/data/TnP_SingleElectron_Run2017E_v1_*.root",
+    "Fv1" : "/wk_cms2/sam7k9621/CMSSW_9_4_0_patch1/src/TriggerEfficiency/EfficiencyPlot/data/TnP_SingleElectron_Run2017F_v1_*.root",
+    
+    "MC"  : "/wk_cms2/sam7k9621/CMSSW_9_4_0_patch1/src/TriggerEfficiency/EfficiencyPlot/data/TnP_DYJetsToLL_M-50_TuneCP5_*.root",
 
     "ele40_v27":{
         "trgname" : "HLT_Ele40_WPTight_Gsf_v*",
@@ -31,4 +33,5 @@
         "ecut" : "",
         "pcut" : " (P_{T} > 45)"
     }
+
 }
