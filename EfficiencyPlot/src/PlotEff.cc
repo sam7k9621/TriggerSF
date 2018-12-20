@@ -41,7 +41,7 @@ DrawEta(const string& trg)
     SetHist(data, kGray+1,  33);
     SetHist(mc,   kAzure-3, 8);
     
-    leg->AddEntry( data, "data", "lp" );
+    leg->AddEntry( data, PlotMgr().GetOption<string>( "source" ).c_str(), "lp" );
     leg->AddEntry( mc,   "MC", "lp" );
     leg->Draw();
 
@@ -65,7 +65,7 @@ DrawEta(const string& trg)
     mgr::SetBottomPlotAxis( h2 );
     h2->GetYaxis()->SetLabelSize(14);
     
-    TGraphAsymmErrors* scale = mgr::DividedGraph(data, mc);
+    TGraphAsymmErrors* scale = DividedGraph(data, mc);
     scale->Draw("EP");
     SetBottomHist(scale);
 
@@ -76,8 +76,9 @@ DrawEta(const string& trg)
 
     c->cd();
     mgr::DrawCMSLabelOuter( PRELIMINARY );
-    mgr::DrawLuminosity(41290);
+    mgr::DrawLuminosity( PlotMgr().GetOption<double>( "lumi" ) );
     mgr::SaveToPDF( c, PlotMgr().GetResultsName( "pdf", "Eta_Eff_" + trg ) );
+    mgr::SaveToROOT( scale, PlotMgr().GetResultsName( "root", "SF_" + trg ), "eta" );
 
     delete c;
     delete line1;
@@ -98,7 +99,7 @@ DrawPt( const string& trg )
     top->Draw();
     top->cd();
     
-    TH1F* h1 = gPad->DrawFrame( 0, 0, 200, 1.2 );
+    TH1F* h1 = gPad->DrawFrame( 0, 0, 500, 1.2 );
     SetHistTitle( h1, "", "Efficiency" );
     mgr::SetTopPlotAxis( h1 );
 
@@ -113,11 +114,11 @@ DrawPt( const string& trg )
     SetHist(data, kGray+1,  33);
     SetHist(mc,   kAzure-3, 8);
 
-    leg->AddEntry( data, "Data", "lp" );
+    leg->AddEntry( data, PlotMgr().GetOption<string>( "source" ).c_str(), "lp" );
     leg->AddEntry( mc,   "MC", "lp" );
     leg->Draw();
 
-    TLine* line1 = new TLine( 0, 1, 200, 1 );
+    TLine* line1 = new TLine( 0, 1, 500, 1 );
     line1->SetLineColor( kRed );
     line1->SetLineStyle( 8 );
     line1->Draw();
@@ -133,16 +134,16 @@ DrawPt( const string& trg )
     bot->Draw();
     bot->cd();
     
-    TH1F* h2 = gPad->DrawFrame( 0, 0.9, 200, 1.1 );
+    TH1F* h2 = gPad->DrawFrame( 0, 0.9, 500, 1.1 );
     SetHistTitle( h2, "P_{T}", "Data/MC" );
     mgr::SetBottomPlotAxis( h2 );
     h2->GetYaxis()->SetLabelSize(14);
    
-    TGraphAsymmErrors* scale = mgr::DividedGraph(data, mc);
+    TGraphAsymmErrors* scale = DividedGraph(data, mc);
     scale->Draw("EP");
     SetBottomHist(scale);
 
-    TLine* line2 = new TLine( 0, 1, 200, 1 );
+    TLine* line2 = new TLine( 0, 1, 500, 1 );
     line2->SetLineColor( kRed );
     line2->SetLineStyle( 8 );
     line2->Draw();
@@ -150,8 +151,9 @@ DrawPt( const string& trg )
     c->cd();
 
     mgr::DrawCMSLabelOuter( PRELIMINARY );
-    mgr::DrawLuminosity(41290);
+    mgr::DrawLuminosity( PlotMgr().GetOption<double>( "lumi" ) );
     mgr::SaveToPDF( c, PlotMgr().GetResultsName( "pdf", "Pt_Eff_" + trg ) );
+    mgr::SaveToROOT( scale, PlotMgr().GetResultsName( "root", "SF_" + trg ), "pt" );
 
     delete c;
     delete line1;
@@ -185,4 +187,38 @@ SetHistTitle( TH1* h, const string& xaxis, const string& yaxis )
     h->GetYaxis()->SetTitle( yaxis.c_str() );
 }
 
+extern TGraphAsymmErrors*
+DividedGraph(
+  TGraphAsymmErrors* num,
+  TGraphAsymmErrors* den
+  )
+{
+ 
+    TGraphAsymmErrors* ans = new TGraphAsymmErrors( num->GetN() );
 
+    for( int i = 0; i < num->GetN(); ++i ){
+      const double numy      = num->GetY()[i];
+      const double numyerrlo = num->GetErrorYlow( i );
+      const double numyerrhi = num->GetErrorYhigh( i );
+  
+      const double deny      = den->GetY()[i];
+      const double denyerrlo = den->GetErrorYlow( i );
+      const double denyerrhi = den->GetErrorYhigh( i );
+  
+      const double numx      = num->GetX()[i];
+      const double xerrlo = num->GetErrorXlow( i );
+      const double xerrhi = num->GetErrorXhigh( i );
+      
+      ans->SetPoint( i, numx, numy / deny );
+      ans->SetPointError(
+        i,
+        xerrlo,
+        xerrhi,
+        ErrorProp( numy, numyerrlo, deny, denyerrlo ),
+        ErrorProp( numy, numyerrhi, deny, denyerrhi )
+        );  
+    }
+      
+    ans->SetTitle( "" );
+    return ans;
+}

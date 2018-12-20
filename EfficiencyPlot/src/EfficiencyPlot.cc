@@ -32,7 +32,7 @@ extern void
 MergeData()
 {
     string cmd = "hadd -f ";
-    vector<string> datalst = PlotMgr().GetListData<string>("datalst");
+    vector<string> datalst = PlotMgr().GetOption< vector<string> >( "datalst" );
 
     string output = PlotMgr().DatasDir() / "data_temp.root ";
     string input = "";
@@ -66,27 +66,28 @@ InitSetting(const string& type, const string& filename)
 {
     //For each trg hist manager has 2*ver hists (peff and eeff)*ver
     TFile* file = TFile::Open( filename.c_str() );
+    string obj = PlotMgr().GetSingleData<string>( type + "obj" );
 
     for( const auto& trg : PlotMgr().GetListData<string>( "trglst" ) ){
 
         string tag = type + trg;
         /***********************************************************************/
-        TH1D* passZ = (TH1D*)file->Get( ( "demo/pass_zmass_" + trg ).c_str() );
-        TH1D* failZ = (TH1D*)file->Get( ( "demo/fail_zmass_" + trg ).c_str() );
+        /*TH1D* passZ = (TH1D*)file->Get( ( "demo/pass_zmass_" + trg ).c_str() );*/
+        //TH1D* failZ = (TH1D*)file->Get( ( "demo/fail_zmass_" + trg ).c_str() );
 
-        passZ->SetDirectory( 0 );
-        failZ->SetDirectory( 0 );
+        //passZ->SetDirectory( 0 );
+        //failZ->SetDirectory( 0 );
 
-        passZ->SetName( "pass_zmass" );
-        failZ->SetName( "fail_zmass" );
+        //passZ->SetName( "pass_zmass" );
+        //failZ->SetName( "fail_zmass" );
 
-        PlotMgr().AddTH1( tag, passZ );
-        PlotMgr().AddTH1( tag, failZ );
+        //PlotMgr().AddTH1( tag, passZ );
+        /*PlotMgr().AddTH1( tag, failZ );*/
 
         /***********************************************************************/
         TEfficiency* teff = (TEfficiency*)file->Get( ("demo/eff_pt_eta_" + trg ).c_str() );
-        TEfficiency* peff = (TEfficiency*)file->Get( ("demo/eff_pt_"  + trg ).c_str() );
-        TEfficiency* eeff = (TEfficiency*)file->Get( ("demo/eff_eta_" + trg ).c_str() );
+        TEfficiency* peff = (TEfficiency*)file->Get( ("demo/eff_pt_"     + trg + obj).c_str() );
+        TEfficiency* eeff = (TEfficiency*)file->Get( ("demo/eff_eta_"    + trg + obj).c_str() );
 
         teff->SetDirectory( 0 );
         peff->SetDirectory( 0 );
@@ -104,6 +105,37 @@ InitSetting(const string& type, const string& filename)
     file->Close();
 }
 
+/*******************************************************************************
+*   PlotUncertainty
+*******************************************************************************/
+extern void
+PlotUncertainty()
+{
+    InitSF( "base" );    
+    InitSF( "compare" ); 
+    DrawUncEta();
+    DrawUncPt();
+}
+
+extern void
+InitSF( const string& type )
+{
+
+    string filename = PlotMgr().GetSingleData<string>( type ) + PlotMgr().GetOption<string>( "era" ) + ".root" ;
+    filename = PlotMgr().ResultsDir() / filename ;
+    TFile* file = TFile::Open( filename.c_str() );
+
+    TGraphAsymmErrors* pt  = (TGraphAsymmErrors*)file->Get( "pt" );
+    TGraphAsymmErrors* eta = (TGraphAsymmErrors*)file->Get( "eta" );
+    
+    pt->SetName( "sf_pt" );
+    eta->SetName( "sf_eta" );
+
+    PlotMgr().AddTGraph( type + "_pt" , pt  );
+    PlotMgr().AddTGraph( type + "_eta", eta );
+
+    file->Close();
+}
 
 extern TH1*
 HistTH1( const string& tag, const string& name )

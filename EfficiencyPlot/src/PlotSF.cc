@@ -18,8 +18,6 @@ MakeScale(TEfficiency* data, TEfficiency* mc)
 {
     TH1* scale =data->GetCopyTotalHisto(); 
    
-    //data->SetStatisticOption(TEfficiency::EStatOption::kBBayesian);
-
     int xbins = scale->GetXaxis()->GetNbins();
     int ybins = scale->GetYaxis()->GetNbins();
     int databin, mcbin;
@@ -59,7 +57,7 @@ PlotSF()
     for( const auto& trg : PlotMgr().GetListData<string>( "trglst" ) ){
         
         TH1* scale = MakeScale( HistTEff( "data" + trg, "eff_pt_eta"), HistTEff( "mc" + trg, "eff_pt_eta") ); 
-        mgr::SaveToROOT( scale, PlotMgr().GetResultsName( "root", "SF_" + trg ), "SF_pt_eta" );
+        mgr::SaveToROOT( scale, PlotMgr().GetResultsName( "root", "SF_HLT_Ele40" ), "SF_pt_eta" );
        
         TCanvas* c = mgr::NewCanvas();
        
