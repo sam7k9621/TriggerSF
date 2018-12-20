@@ -1,5 +1,6 @@
 #include "TLorentzVector.h"
 #include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
+#include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
 #include "TriggerEfficiency/EfficiencyPlot/interface/ElEfficiency.h"
 
 #include <iostream>
@@ -13,9 +14,9 @@ ElEfficiency::ElEfficiency( const edm::ParameterSet& iConfig ) :
     _pro( consumes<vector<pat::Electron> >( iConfig.getParameter<edm::InputTag>( "probe" ) ) ),
     _tag( consumes<vector<pat::Electron> >( iConfig.getParameter<edm::InputTag>( "tag" ) ) ),
     _pusrc ( consumes<vector<PileupSummaryInfo>>(iConfig.getParameter<edm::InputTag>("pusrc") ) ),
+    _genevtsrc( consumes<GenEventInfoProduct>( iConfig.getParameter<edm::InputTag>( "genevtsrc" ) ) ),
     _useMC( iConfig.getParameter<bool>( "useMC" ) ),
     _puweight( ReadWeight(iConfig.getParameter<edm::FileInPath>("filename").fullPath()) )
-
 {
     usesResource( "TFileService" );
 
@@ -28,10 +29,14 @@ ElEfficiency::ElEfficiency( const edm::ParameterSet& iConfig ) :
         vector<double> ptbin  = tagtri.getParameter<vector<double> >( "ptbin" );
         AddHist( "pass_zmass_" + triname,    80, 50, 130 );
         AddHist( "fail_zmass_" + triname,    80, 50, 130 );
+        AddHist( "pass_elPt_" + triname,    500, 0, 500 );
+        AddHist( "fail_elPt_" + triname,    80,  0, 500 );
 
         Add2DTEff("eff_pt_eta_" + triname, eta2Dbin, pt2Dbin);
         AddTEff("eff_pt_"  + triname, ptbin);
         AddTEff("eff_eta_" + triname, etabin);
+        AddTEff("eff_pt_"  + triname + "_zmass", ptbin);
+        AddTEff("eff_eta_" + triname + "_zmass", etabin);
     }
 }
 
@@ -39,7 +44,6 @@ ElEfficiency::ElEfficiency( const edm::ParameterSet& iConfig ) :
 ElEfficiency::~ElEfficiency()
 {
 }
-
 
 void
 ElEfficiency::analyze( const edm::Event& iEvent, const edm::EventSetup& iSetup )
@@ -52,6 +56,7 @@ ElEfficiency::analyze( const edm::Event& iEvent, const edm::EventSetup& iSetup )
     pat::Electron pro = ( *prohandle )[ 0 ];
 
     edm::Handle<vector<PileupSummaryInfo> > puhandle;
+    edm::Handle<GenEventInfoProduct> _genevthandle;
     double weight = 1.0;
     if(_useMC){
         iEvent.getByToken( _pusrc, puhandle );
@@ -59,16 +64,20 @@ ElEfficiency::analyze( const edm::Event& iEvent, const edm::EventSetup& iSetup )
         if( pu < _puweight.size() ){
             weight = _puweight.at( pu );
         }
+
+        iEvent.getByToken( _genevtsrc, _genevthandle );
+        double gweight = _genevthandle->weight() > 0 ? 1 : -1 ;
+        weight *= gweight;
     }
 
     TLorentzVector tagLV( tag.px(), tag.py(), tag.pz(), tag.energy() );
     TLorentzVector proLV( pro.px(), pro.py(), pro.pz(), pro.energy() );
     double zmass = ( tagLV + proLV ).M();
-
+    double elpt  = pro.pt();
     for( int i = 0; i < (int)_tagtri.size(); i++ ){
-        /****common setting****/
+        //[>***common setting***<]
         string triname = _tagtri[ i ].getParameter<string>( "name" );
-        /****setting for tag****/
+        //[>***setting for tag***<]
         vector<string> hltlist = _tagtri[ i ].getParameter<vector<string> >( "HLT" );
         double ptcut           = _tagtri[ i ].getParameter<double>( "ptcut" );
         double etacut          = _tagtri[ i ].getParameter<double>( "etacut" );
@@ -84,7 +93,7 @@ ElEfficiency::analyze( const edm::Event& iEvent, const edm::EventSetup& iSetup )
             continue;
         }
 
-        /****setting for probe****/
+        //[>***setting for probe***<]
         hltlist = _protri[ i ].getParameter<vector<string> >( "HLT" );
         ptcut   = _protri[ i ].getParameter<double>( "ptcut" );
         etacut  = _protri[ i ].getParameter<double>( "etacut" );
@@ -113,6 +122,25 @@ ElEfficiency::analyze( const edm::Event& iEvent, const edm::EventSetup& iSetup )
                     pro.superCluster()->eta() 
                     );
             }
+            
+            if( zmass > 70 && zmass < 110 ){
+
+                if( fabs( pro.superCluster()->eta() ) < etacut ){
+                    HistTEff( "eff_pt_" + triname + "_zmass" )->FillWeighted( 
+                            pro.hasUserInt( hlt ), 
+                            weight, 
+                            pro.pt() 
+                            );
+                }
+
+                if( pro.pt() > ptcut ){
+                HistTEff( "eff_eta_" + triname + "_zmass" )->FillWeighted( 
+                        pro.hasUserInt( hlt ), 
+                        weight, 
+                        pro.superCluster()->eta() 
+                        );
+                }
+            }
         }
 
         //check Z backgorund
@@ -121,10 +149,12 @@ ElEfficiency::analyze( const edm::Event& iEvent, const edm::EventSetup& iSetup )
             for( const auto& hlt : hltlist ){
                 if( pro.hasUserInt( hlt ) ){
                     Hist( "pass_zmass_" + triname )->Fill( zmass, weight );
+                    Hist( "pass_elPt_" + triname  )->Fill( elpt,  weight );
                 }
 
                 else{
                     Hist( "fail_zmass_" + triname )->Fill( zmass, weight );
+                    Hist( "fail_elPt_"  + triname  )->Fill( elpt,  weight );
                 }
             }
         }

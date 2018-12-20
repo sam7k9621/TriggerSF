@@ -23,6 +23,7 @@ class ElEfficiency : public edm::one::EDAnalyzer<edm::one::SharedResources>,
         const edm::EDGetToken _pro;
         const edm::EDGetToken _tag;
         const edm::EDGetToken _pusrc;
+        const edm::EDGetToken _genevtsrc;
 
         bool _useMC;
         std::vector<double> _puweight;

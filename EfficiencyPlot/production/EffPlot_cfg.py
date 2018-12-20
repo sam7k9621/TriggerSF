@@ -76,6 +76,7 @@ if options.lepton == "electron":
             electrontool,
             useMC = cms.bool(options.useMC),
             pusrc = cms.InputTag("slimmedAddPileupInfo"),
+            genevtsrc = cms.InputTag('generator'),
             filename = cms.FileInPath("TriggerEfficiency/EfficiencyPlot/test/pileupweights_69200.csv")
             )
 elif options.lepton == "muon":
@@ -84,6 +85,7 @@ elif options.lepton == "muon":
             muontool,
             useMC = cms.bool(options.useMC),
             pusrc = cms.InputTag("slimmedAddPileupInfo"),
+            genevtsrc = cms.InputTag('generator'),
             filename = cms.FileInPath("TriggerEfficiency/EfficiencyPlot/test/pileupweights_69200.csv")
             )
 

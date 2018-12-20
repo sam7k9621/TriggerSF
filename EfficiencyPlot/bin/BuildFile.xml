@@ -6,3 +6,4 @@
 <use name="DataFormats/FWLite"/>
 
 <bin name="ploteff"    file="PlotEfficiency.cc"/>
+<bin name="plotunc"    file="PlotUncertainty.cc"/>

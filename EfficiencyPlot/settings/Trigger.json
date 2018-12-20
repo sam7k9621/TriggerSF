@@ -1,37 +1,35 @@
 {
-    "trglst"  : ["ele40_v38"],
-    "datalst" : [
-        "Bv1",
-        "Cv1",
-        "Dv1",
-        "Ev1",
-        "Fv1"
-            ],
+    "trglst"  : ["ele40_v35" ],
+    "dataobj" : "",
+    "mcobj"   : "",
 
-    "Bv1" : "/wk_cms2/sam7k9621/CMSSW_9_4_0_patch1/src/TriggerEfficiency/EfficiencyPlot/data/TnP_SingleElectron_Run2017B_v1_*.root",
-    "Cv1" : "/wk_cms2/sam7k9621/CMSSW_9_4_0_patch1/src/TriggerEfficiency/EfficiencyPlot/data/TnP_SingleElectron_Run2017C_v1_*.root",
-    "Dv1" : "/wk_cms2/sam7k9621/CMSSW_9_4_0_patch1/src/TriggerEfficiency/EfficiencyPlot/data/TnP_SingleElectron_Run2017D_v1_*.root",
-    "Ev1" : "/wk_cms2/sam7k9621/CMSSW_9_4_0_patch1/src/TriggerEfficiency/EfficiencyPlot/data/TnP_SingleElectron_Run2017E_v1_*.root",
-    "Fv1" : "/wk_cms2/sam7k9621/CMSSW_9_4_0_patch1/src/TriggerEfficiency/EfficiencyPlot/data/TnP_SingleElectron_Run2017F_v1_*.root",
+    "Bv1" : "/wk_cms2/sam7k9621/CMSSW_9_4_6_patch1/src/TriggerEfficiency/EfficiencyPlot/data/TnP_SingleElectron_Run2017B_v1_*.root",
+    "Cv1" : "/wk_cms2/sam7k9621/CMSSW_9_4_6_patch1/src/TriggerEfficiency/EfficiencyPlot/data/TnP_SingleElectron_Run2017C_v1_*.root",
+    "Dv1" : "/wk_cms2/sam7k9621/CMSSW_9_4_6_patch1/src/TriggerEfficiency/EfficiencyPlot/data/TnP_SingleElectron_Run2017D_v1_*.root",
+    "Ev1" : "/wk_cms2/sam7k9621/CMSSW_9_4_6_patch1/src/TriggerEfficiency/EfficiencyPlot/data/TnP_SingleElectron_Run2017E_v1_*.root",
+    "Fv1" : "/wk_cms2/sam7k9621/CMSSW_9_4_6_patch1/src/TriggerEfficiency/EfficiencyPlot/data/TnP_SingleElectron_Run2017F_v1_*.root",
     
-    "MC"  : "/wk_cms2/sam7k9621/CMSSW_9_4_0_patch1/src/TriggerEfficiency/EfficiencyPlot/data/TnP_DYJetsToLL_M-50_TuneCP5_*.root",
+    "MC"  : "/wk_cms2/sam7k9621/CMSSW_9_4_6_patch1/src/TriggerEfficiency/EfficiencyPlot/data/TnP_DYJetsToLL_13TeV-madgraphMLM-pythia8_*.root",
 
-    "ele40_v27":{
+    "ele40_v32":{
         "trgname" : "HLT_Ele40_WPTight_Gsf_v*",
         "ecut" : "",
-        "pcut" : " (P_{T} > 45)"
+        "pcut" : " (P_{T} > 55)"
     },
 
     "ele40_v35":{
         "trgname" : "HLT_Ele40_WPTight_Gsf_v*",
         "ecut" : "",
-        "pcut" : " (P_{T} > 45)"
+        "pcut" : " (P_{T} > 55)"
     },
 
     "ele40_v38":{
         "trgname" : "HLT_Ele40_WPTight_Gsf_v*",
         "ecut" : "",
-        "pcut" : " (P_{T} > 45)"
-    }
+        "pcut" : " (P_{T} > 55)"
+    },
 
+    "base" : "SF_ele40_v35_",
+    "compare" : "SF_ele40_v35_MC_",
+    "desc" : "Change MC dataset"
 }

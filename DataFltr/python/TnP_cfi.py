@@ -37,10 +37,6 @@ electrontool = cms.PSet(
             cms.PSet(
                 HLTName = cms.string("HLT_Ele27_WPTight_Gsf_v*"),
                 FilterName = cms.string("hltEle27WPTightGsfTrackIsoFilter")
-            ),
-            cms.PSet(
-                HLTName = cms.string("HLT_Photon200"),
-                FilterName = cms.string("hltEG200HEFilter")
             )
         ),
 

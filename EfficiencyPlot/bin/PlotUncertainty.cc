@@ -8,9 +8,9 @@ main( int argc, char* argv[] )
 {
     opt::options_description de( "Command for SelectionCut" );
     de.add_options()
-        ( "source,s",  opt::value<string>()->required(), "Which era of data or mc" )
-        ( "lumi,l",    opt::value<double>()->required(), "Which era of data or mc" )
-        ( "datalst,d", opt::value< vector<string> >()->multitoken()->required(), "Which era of data or mc" )
+        ( "source,s", opt::value<string>()->required(), "Which era of data or mc" )
+        ( "lumi,l",   opt::value<double>()->required(), "Which era of data or mc" )
+        ( "era,e",   opt::value<string>()->required(), "Which era of data or mc" )
     ;
     PlotMgr( "EfficiencyPlot" ).AddOptions( de );
     const int run = PlotMgr().ParseOptions( argc, argv );
@@ -23,6 +23,6 @@ main( int argc, char* argv[] )
         return 1;
     }
 
-    PlotMgr().SetFileName( { "source" } );
-    PlotEff();
+    PlotMgr().SetFileName( { "source", "era" } );
+    PlotUncertainty();
 }

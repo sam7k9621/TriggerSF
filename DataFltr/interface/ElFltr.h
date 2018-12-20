@@ -2,6 +2,7 @@
 #define ELFTR_H
 
 #include "FWCore/Framework/interface/Event.h"
+#include "FWCore/Common/interface/TriggerNames.h"
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
 #include "FWCore/Framework/interface/stream/EDFilter.h"
@@ -16,7 +17,6 @@
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
-#include "FWCore/Common/interface/TriggerNames.h"
 
 #include <string>
 #include <vector>

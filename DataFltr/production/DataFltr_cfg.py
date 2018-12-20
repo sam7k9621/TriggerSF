@@ -8,7 +8,7 @@ import FWCore.ParameterSet.Config as cms
 options = opts.VarParsing ('analysis')
 
 options.register('sample',
-    'file:/wk_cms2/sam7k9621/CMSSW_9_4_0_patch1/src/TriggerEfficiency/DataFltr/test/test.root',
+    'file:/wk_cms2/sam7k9621/CMSSW_9_4_6_patch1/src/TriggerEfficiency/DataFltr/test/test.root',
     opts.VarParsing.multiplicity.list,
     opts.VarParsing.varType.string,
     'Sample to analyze')

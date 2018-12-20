@@ -44,7 +44,7 @@ def submitsample(argv):
     parser.add_argument('-s', '--site'        , help='which site to store' , type=str, default='T2_TW_NCHC')
     parser.add_argument('-d', '--directory'   , help='the storage lfn dir' , type=str, default='/store/user/pusheng/20170827B2GTriggerEfficiency')
     parser.add_argument('-l', '--lepton'      , help='which lepton using'  , type=str, default=None, required=True)
-    parser.add_argument('-n', '--jobnumber'   , help='unitsPerJob'         , type=str, default='1')
+    parser.add_argument('-n', '--jobnumber'   , help='unitsPerJob'         , type=str, default='2')
     parser.add_argument('-m', '--useMC'       , action='store_true')
     parser.add_argument('-t', '--dryrun'      , action='store_true')
 
@@ -75,11 +75,11 @@ def submitsample(argv):
     cfgfile.write(content)
     cfgfile.close()
 
+    os.system('source /cvmfs/cms.cern.ch/crab3/crab.sh')
     if opt.dryrun :
         os.system('crab submit -c ' + filename + ' --dryrun')
-
-    # os.system('source /cvmfs/cms.cern.ch/crab3/crab.sh')
-    # os.system('crab submit ' +filename)
+    else :
+        os.system('crab submit ' +filename)
 
 
 if __name__ == '__main__':

@@ -17,6 +17,14 @@ extern void                            MergeMC();
 extern void                            CleanSample();
 extern void                            InitSetting(const std::string&, const std::string&);
 
+/*******************************************************************************
+*   PlotUncertainty
+*******************************************************************************/
+extern void PlotUncertainty();
+extern void InitSF( const std::string& );
+extern void DrawUncEta();
+extern void DrawUncPt();
+
 extern TH1*                            HistTH1( const std::string&, const std::string& );
 extern TH2*                            HistTH2( const std::string&, const std::string& );
 extern TGraphAsymmErrors*              HistTGraph( const std::string&, const std::string& );
@@ -47,6 +55,8 @@ extern double ErrorProp(
 
 extern TH1* MakeScale(TEfficiency*, TEfficiency*);
 extern void  PlotSF();
+extern TGraphAsymmErrors* DividedGraph( TGraphAsymmErrors*, TGraphAsymmErrors*);
+extern TGraphAsymmErrors* DividedUncGraph( TGraphAsymmErrors*, TGraphAsymmErrors*);
 /*******************************************************************************
 *   PlotEfficiency
 *******************************************************************************/
