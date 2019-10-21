@@ -1,5 +1,9 @@
 import FWCore.ParameterSet.Config as cms
 
+DataGlobalTag = '102X_dataRun2_Sep2018ABC_v2'
+MCGlobalTag   = '102X_upgrade2018_realistic_v18'
+ElectronEra   = '2018-Prompt'
+
 commontool = cms.PSet(
         #source
         musrc = cms.InputTag( "slimmedMuons" ),
@@ -19,24 +23,8 @@ electrontool = cms.PSet(
         #trigger we used
         triggerCache = cms.VPSet(
             cms.PSet(
-                HLTName = cms.string("HLT_Ele40_WPTight_Gsf_v*"),
-                FilterName = cms.string("hltEle40noerWPTightGsfTrackIsoFilter")
-            ),
-            cms.PSet(
-                HLTName = cms.string("HLT_Ele38_WPTight_Gsf_v*"),
-                FilterName = cms.string("hltEle38noerWPTightGsfTrackIsoFilter")
-            ),
-            cms.PSet(
-                HLTName = cms.string("HLT_Ele35_WPTight_Gsf_v*"),
-                FilterName = cms.string("hltEle35noerWPTightGsfTrackIsoFilter")
-            ),
-            cms.PSet(
                 HLTName = cms.string("HLT_Ele32_WPTight_Gsf_v*"),
-                FilterName = cms.string("hltEle32WPTightGsfTrackIsoFilter")
-            ),
-            cms.PSet(
-                HLTName = cms.string("HLT_Ele27_WPTight_Gsf_v*"),
-                FilterName = cms.string("hltEle27WPTightGsfTrackIsoFilter")
+                FilterName = cms.string("hltEle32noerWPTightGsfTrackIsoFilter")
             )
         ),
 
@@ -48,14 +36,14 @@ electrontool = cms.PSet(
         ProbePassID = cms.string("tight"),  #Require probe electron to pass a ID ( input will be "loose"/"tight"/"medium"/"heep" )
         probeImpact = cms.bool(True),
 
-        #https://twiki.cern.ch/twiki/bin/view/CMS/CutBasedElectronIdentificationRun2#Recipe80X
-        looseMap = cms.InputTag ("egmGsfElectronIDs:cutBasedElectronID-Fall17-94X-V1-loose"),
-        mediumMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Fall17-94X-V1-medium"),
-        tightMap = cms.InputTag ("egmGsfElectronIDs:cutBasedElectronID-Fall17-94X-V1-tight"),
-        heepMap = cms.InputTag  ("egmGsfElectronIDs:heepElectronID-HEEPV60"),
-
+        eleVetoIdMap           = cms.string('cutBasedElectronID-Fall17-94X-V2-veto'),
+        eleLooseIdMap          = cms.string('cutBasedElectronID-Fall17-94X-V2-loose'),
+        eleMediumIdMap         = cms.string('cutBasedElectronID-Fall17-94X-V2-medium'),
+        eleTightIdMap          = cms.string('cutBasedElectronID-Fall17-94X-V2-tight'),
+        eleHEEPIdMap           = cms.string('heepElectronID-HEEPV70'),
+        
         #customized cut
-        tagPtMin = cms.double(30),
+        tagPtMin = cms.double(35),
         tagEtaMax = cms.double(2.5),
         probePtMin = cms.double(8),
         probeEtaMax = cms.double(2.5)

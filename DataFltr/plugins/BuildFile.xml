@@ -2,5 +2,5 @@
 <use name="FWCore/PluginManager"/>
 <use name="FWCore/ParameterSet"/>
 <use name="DataFormats/PatCandidates"/>
-<use name="TriggerEfficiency/DataFltr"/>
+<use name="TriggerSF/DataFltr"/>
 <flags EDM_PLUGIN="1"/>

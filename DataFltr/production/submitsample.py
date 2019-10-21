@@ -33,16 +33,17 @@ config.Site.storageSite = '{8}'
 """
 
 import argparse
-import TriggerEfficiency.DataFltr.MakeName as nametool
+import TriggerSF.DataFltr.MakeName as nametool
 import os
 import sys
+import time 
 
 def submitsample(argv):
 
     parser = argparse.ArgumentParser(description='Process to sending crab for TnP')
     parser.add_argument('-i', '--inputdataset', help='which dataset to run', type=str, default=None, required=True)
     parser.add_argument('-s', '--site'        , help='which site to store' , type=str, default='T2_TW_NCHC')
-    parser.add_argument('-d', '--directory'   , help='the storage lfn dir' , type=str, default='/store/user/pusheng/20170827B2GTriggerEfficiency')
+    parser.add_argument('-d', '--directory'   , help='the storage lfn dir' , type=str, default=time.strftime("/store/user/pusheng/%y-%b-%d-%H%M_HLTSF" ) ) 
     parser.add_argument('-l', '--lepton'      , help='which lepton using'  , type=str, default=None, required=True)
     parser.add_argument('-n', '--jobnumber'   , help='unitsPerJob'         , type=str, default='2')
     parser.add_argument('-m', '--useMC'       , action='store_true')
@@ -67,7 +68,7 @@ def submitsample(argv):
         opt.site
     )
 
-    filename = './crab_config/TnP' + nametool.requestName( opt.inputdataset, opt.useMC) + '.py'
+    filename = './crab_config/TnP' + nametool.requestName( opt.inputdataset, opt.useMC ) + '.py'
     if not os.path.isdir('./crab_config'):
         os.system('mkdir ./crab_config')
 
@@ -75,11 +76,10 @@ def submitsample(argv):
     cfgfile.write(content)
     cfgfile.close()
 
-    os.system('source /cvmfs/cms.cern.ch/crab3/crab.sh')
     if opt.dryrun :
         os.system('crab submit -c ' + filename + ' --dryrun')
     else :
-        os.system('crab submit ' +filename)
+        os.system('crab submit -c ' + filename )
 
 
 if __name__ == '__main__':

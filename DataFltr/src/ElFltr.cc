@@ -1,5 +1,5 @@
 #include "TLorentzVector.h"
-#include "TriggerEfficiency/DataFltr/interface/ElFltr.h"
+#include "TriggerSF/DataFltr/interface/ElFltr.h"
 #include "DataFormats/Candidate/interface/Candidate.h"
 #include <queue>
 
@@ -69,20 +69,23 @@ ElFltr::passKin( const pat::Electron& el, const bool& isTag ) const
 
 
 bool
-ElFltr::passId( const edm::Ptr<pat::Electron>& elptr, const string& level )
+ElFltr::passId( const edm::Ptr<pat::Electron>& it_el, const string& level )
 {
     
     if( level == "loose" ){
-        return ( *_looseMapHandle )[ elptr ] ;
+        return it_el->electronID( _electronID_loosemap  );
     }
     else if( level == "medium" ){
-        return ( *_mediumMapHandle )[ elptr ] ;
+        return it_el->electronID( _electronID_mediummap ); 
     }
     else if( level == "tight" ){
-        return ( *_tightMapHandle )[ elptr ] ;
+        return it_el->electronID( _electronID_tightmap  ); 
+    }
+    else if( level == "heep" ){
+        return it_el->electronID( _electronID_HEEPmap   );
     }
     else{
-        return ( *_heepMapHandle )[ elptr ] ;
+        return it_el->electronID( _electronID_vetomap   );
     }
 
 }

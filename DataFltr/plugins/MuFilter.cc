@@ -1,4 +1,4 @@
-#include "TriggerEfficiency/DataFltr/interface/MuFltr.h"
+#include "TriggerSF/DataFltr/interface/MuFltr.h"
 
 using namespace std;
 

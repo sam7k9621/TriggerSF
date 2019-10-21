@@ -72,15 +72,12 @@ class ElFltr : public edm::stream::EDFilter<> {
         /*-------electron member------*/
         const bool _pImpact;
         const bool _tImpact;
-
-        const edm::EDGetTokenT<edm::ValueMap<bool> > _looseMapToken;
-        const edm::EDGetTokenT<edm::ValueMap<bool> > _mediumMapToken;
-        const edm::EDGetTokenT<edm::ValueMap<bool> > _tightMapToken;
-        const edm::EDGetTokenT<edm::ValueMap<bool> > _heepMapToken;
-        edm::Handle<edm::ValueMap<bool> > _looseMapHandle;
-        edm::Handle<edm::ValueMap<bool> > _mediumMapHandle;
-        edm::Handle<edm::ValueMap<bool> > _tightMapHandle;
-        edm::Handle<edm::ValueMap<bool> > _heepMapHandle;
+        
+        const std::string _electronID_vetomap;
+        const std::string _electronID_loosemap;
+        const std::string _electronID_mediummap;
+        const std::string _electronID_tightmap;
+        const std::string _electronID_HEEPmap;
 
         /*------common tool------*/
         reco::VertexCollection _vtx;

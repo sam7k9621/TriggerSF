@@ -1,4 +1,4 @@
-#include "TriggerEfficiency/DataFltr/interface/ElFltr.h"
+#include "TriggerSF/DataFltr/interface/ElFltr.h"
 
 #include <iostream>
 
@@ -22,10 +22,11 @@ ElFltr::ElFltr( const edm::ParameterSet& iConfig ) :
     _trigger( iConfig.getParameter<vector<edm::ParameterSet> >( "triggerCache" ) ),
     _pImpact( iConfig.getParameter <bool>( "probeImpact" ) ),
     _tImpact( iConfig.getParameter <bool>( "tagImpact" ) ),
-    _looseMapToken( consumes <edm::ValueMap <bool> >( iConfig.getParameter <edm::InputTag>( "looseMap" ) ) ),
-    _mediumMapToken( consumes <edm::ValueMap <bool> >( iConfig.getParameter <edm::InputTag>( "mediumMap" ) ) ),
-    _tightMapToken( consumes <edm::ValueMap <bool> >( iConfig.getParameter <edm::InputTag>( "tightMap" ) ) ),
-    _heepMapToken( consumes <edm::ValueMap <bool> >( iConfig.getParameter <edm::InputTag>( "heepMap" ) ) )
+    _electronID_vetomap( iConfig.getParameter<string>( "eleVetoIdMap"    ) ),
+    _electronID_loosemap( iConfig.getParameter<string>( "eleLooseIdMap"   ) ),
+    _electronID_mediummap( iConfig.getParameter<string>( "eleMediumIdMap"  ) ),
+    _electronID_tightmap( iConfig.getParameter<string>( "eleTightIdMap"   ) ),
+    _electronID_HEEPmap( iConfig.getParameter<string>( "eleHEEPIdMap"    ) )
 {
     produces<vector<pat::Electron> >( "Tag" );
     produces<vector<pat::Electron> >( "Probe" );
@@ -41,10 +42,6 @@ ElFltr::filter( edm::Event& iEvent, const edm::EventSetup& iSetup )
     iEvent.getByToken( _vtxsrc,             _vtxhandle );
     iEvent.getByToken( _hltInputTag,        _triggerResults );
     iEvent.getByToken( _hltObjectsInputTag, _triggerObjects );
-    iEvent.getByToken( _looseMapToken,      _looseMapHandle );
-    iEvent.getByToken( _mediumMapToken,     _mediumMapHandle );
-    iEvent.getByToken( _tightMapToken,      _tightMapHandle );
-    iEvent.getByToken( _heepMapToken,       _heepMapHandle );
 
     if( _vtxhandle.isValid() ){
         _vtx = *_vtxhandle;
