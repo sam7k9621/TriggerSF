@@ -1,7 +1,7 @@
 
 from CRABClient.UserUtilities import config, getUsernameFromSiteDB
 config = config()
-config.General.requestName = 'TnP_DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8'
+config.General.requestName = 'TnP_DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8'
 config.General.workArea = './crab_config_17_2019_Oct_22/'
 config.General.instance = 'prod'
 config.General.transferOutputs = True
@@ -17,9 +17,9 @@ config.JobType.pyCfgParams = [
    ]
 config.JobType.maxMemoryMB      = 2000 # Requesting slightly more memory
 config.JobType.maxJobRuntimeMin = 2000 # Requesting slightly more runtime
-config.Data.inputDataset  = '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM'
+config.Data.inputDataset  = '/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017RECOSIMstep_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM'
 config.Data.inputDBS      = 'global'
 config.Data.splitting     = 'FileBased'
 config.Data.unitsPerJob   = 10
-config.Data.outLFNDirBase = '/store/user/pusheng/HLTSF_2019_Oct_22_1623'
+config.Data.outLFNDirBase = '/store/user/pusheng/HLTSF_2019_Oct_22_1624'
 config.Site.storageSite = 'T2_TW_NCHC'
