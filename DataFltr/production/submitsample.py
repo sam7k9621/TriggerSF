@@ -82,7 +82,7 @@ def CrabGetOutput():
         
         for output in outputlst:
             
-            while len(multiprocessing.active_children()) > 4:
+            while len(multiprocessing.active_children()) > (multiprocessing.cpu_count()/2):
                 time.sleep( 120 )
             
             s = subprocess.Popen( 'crab status -d {}/{} | grep "finished"'.format( dir, output ), shell=True, stdout=subprocess.PIPE )
