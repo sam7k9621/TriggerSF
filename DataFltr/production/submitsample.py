@@ -40,6 +40,7 @@ import re
 import sys
 import time 
 import math
+import multiprocessing
 import TriggerSF.DataFltr.MakeName as nametool
 
 def CrabCmd( cmd ):
@@ -71,21 +72,29 @@ def CrabGetOutput():
     dirlst, err = s.communicate()
     dirlst = filter( lambda x: "crab_config" in x, dirlst.split('\n') )     
 
+    def cmdfunc( dir, output, head, tail ):
+        os.system( "crab getoutput -d {}/{} --jobids={}-{}".format(dir, output, head, tail) )
+
     for dir in dirlst:
         s = subprocess.Popen( 'ls {}'.format( dir ), shell=True, stdout=subprocess.PIPE )
         outputlst, err = s.communicate()
         outputlst = filter( lambda x: "crab_TnP" in x, outputlst.split('\n') )
         
         for output in outputlst:
-            print "\033[1m\033[31m{}/{}\033[0m".format( dir, output )
+            
+            while len(multiprocessing.active_children()) > 4:
+                time.sleep( 120 )
+            
             s = subprocess.Popen( 'crab status -d {}/{} | grep "finished"'.format( dir, output ), shell=True, stdout=subprocess.PIPE )
             joblst, err = s.communicate()
             joblst = map(int, filter( lambda x: x.isdigit(), re.split( '\t|%|\(|\)|\/', joblst ) ) )
             if joblst[0] == joblst[1]:
                 for jobid in DivideJob( joblst[0] ):
-                    os.system( "crab getoutput -d {}/{} --jobids={}-{}".format(dir, output, jobid[0], jobid[1]) )
+                    print "\033[1m\033[31m{}/{} {}-{} submitted\033[0m".format( dir, output, jobid[0], jobid[1] )
+                    proc = multiprocessing.Process( target = cmdfunc, args = (dir, output, jobid[0], jobid[1]) )
+                    proc.start()
             else: 
-                print "Not yet {}/{}".format( joblst[0], joblst[1] )
+                print "\033[1m\033[31m{}/{} not yet finished: {}/{}\033[0m".format( dir, output, joblst[0], joblst[1] )
 
 def CrabSubmit( opt ):
     dirname  = './crab_config_{}_{}/'.format( opt.year, time.strftime("%Y_%b_%d") )
