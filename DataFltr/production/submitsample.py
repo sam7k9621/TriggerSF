@@ -34,32 +34,60 @@ config.Site.storageSite = '{9}'
 """
 
 import argparse
-import TriggerSF.DataFltr.MakeName as nametool
+import subprocess
 import os
+import re
 import sys
 import time 
+import math
+import TriggerSF.DataFltr.MakeName as nametool
 
-def submitsample(argv):
+def CrabCmd( cmd ):
+    s = subprocess.Popen( 'ls', shell=True, stdout=subprocess.PIPE )
+    dirlst, err = s.communicate()
+    dirlst = filter( lambda x: "crab_config" in x, dirlst.split('\n') )     
 
-    parser = argparse.ArgumentParser(description='Process to sending crab for TnP')
-    parser.add_argument('-i', '--inputdataset', help='which dataset to run', type=str, required=True)
-    parser.add_argument('-s', '--site'        , help='which site to store' , type=str, default='T2_TW_NCHC')
-    parser.add_argument('-y', '--year'        , help='which year'          , type=str, required=True)
-    parser.add_argument('-d', '--directory'   , help='the storage lfn dir' , type=str, default=time.strftime("/store/user/pusheng/HLTSF_%Y_%b_%d_%H%M" ) ) 
-    parser.add_argument('-l', '--lepton'      , help='which lepton using'  , type=str, required=True)
-    parser.add_argument('-n', '--jobnumber'   , help='unitsPerJob'         , type=str, default='2')
-    parser.add_argument('-m', '--useMC'       , action='store_true')
-    parser.add_argument('-t', '--dryrun'      , action='store_true')
-    parser.add_argument('-f', '--force'       , action='store_true')
-    parser.add_argument('-r', '--submit'      , action='store_true')
+    for dir in dirlst:
+        s = subprocess.Popen( 'ls {}'.format( dir ), shell=True, stdout=subprocess.PIPE )
+        outputlst, err = s.communicate()
+        outputlst = filter( lambda x: "crab_TnP" in x, outputlst.split('\n') )
+        
+        for output in outputlst:
+            print "\033[1m\033[31m{}/{}\033[0m".format( dir, output )
+            os.system( "{} {}/{}".format( cmd, dir, output ) )
 
-    try:
-        opt = parser.parse_args()
-    except:
-        print "Error processing arguments!"
-        parser.print_help()
-        raise
+def DivideJob( total ):
+    lst = []
+    times = int( math.ceil( total / 500. ) )
+    for i in range( times ):        
+        head = 500*i + 1
+        tail = 500* (i+1)
+        tail = tail if tail < total else total
+        lst.append( (head, tail) )
+    return lst
 
+def CrabGetOutput():
+    s = subprocess.Popen( 'ls', shell=True, stdout=subprocess.PIPE )
+    dirlst, err = s.communicate()
+    dirlst = filter( lambda x: "crab_config" in x, dirlst.split('\n') )     
+
+    for dir in dirlst:
+        s = subprocess.Popen( 'ls {}'.format( dir ), shell=True, stdout=subprocess.PIPE )
+        outputlst, err = s.communicate()
+        outputlst = filter( lambda x: "crab_TnP" in x, outputlst.split('\n') )
+        
+        for output in outputlst:
+            print "\033[1m\033[31m{}/{}\033[0m".format( dir, output )
+            s = subprocess.Popen( 'crab status -d {}/{} | grep "finished"'.format( dir, output ), shell=True, stdout=subprocess.PIPE )
+            joblst, err = s.communicate()
+            joblst = map(int, filter( lambda x: x.isdigit(), re.split( '\t|%|\(|\)|\/', joblst ) ) )
+            if joblst[0] == joblst[1]:
+                for jobid in DivideJob( joblst[0] ):
+                    os.system( "crab getoutput -d {}/{} --jobids={}-{}".format(dir, output, jobid[0], jobid[1]) )
+            else: 
+                print "Not yet {}/{}".format( joblst[0], joblst[1] )
+
+def CrabSubmit( opt ):
     dirname  = './crab_config_{}_{}/'.format( opt.year, time.strftime("%Y_%b_%d") )
     jobname  = nametool.requestName( opt.inputdataset, opt.useMC )
     filename = dirname + jobname + '.py'
@@ -91,6 +119,43 @@ def submitsample(argv):
         else:
             os.system('crab submit -c ' + filename )
 
+def main(argv):
+
+    parser = argparse.ArgumentParser(description='Process to sending crab for TnP')
+    parser.add_argument('-i', '--inputdataset', help='which dataset to run', type=str, default=None)
+    parser.add_argument('-s', '--site'        , help='which site to store' , type=str, default='T2_TW_NCHC')
+    parser.add_argument('-y', '--year'        , help='which year'          , type=str, default=None)
+    parser.add_argument('-d', '--directory'   , help='the storage lfn dir' , type=str, default=time.strftime("/store/user/pusheng/HLTSF_%Y_%b_%d_%H%M" ) ) 
+    parser.add_argument('-l', '--lepton'      , help='which lepton using'  , type=str, default=None)
+    parser.add_argument('-n', '--jobnumber'   , help='unitsPerJob'         , type=str, default='2')
+    parser.add_argument('-m', '--useMC'       , action='store_true')
+    parser.add_argument('-t', '--dryrun'      , action='store_true')
+    parser.add_argument('-f', '--force'       , action='store_true')
+    parser.add_argument('-r', '--submit'      , action='store_true')
+    parser.add_argument('--resubmit'          , action='store_true')
+    parser.add_argument('--status'            , action='store_true')
+    parser.add_argument('--getoutput'         , action='store_true')
+
+    try:
+        opt = parser.parse_args()
+    except:
+        print "Error processing arguments!"
+        parser.print_help()
+        raise
+
+    if opt.resubmit:
+        CrabCmd( "crab resubmit -d" )
+
+    elif opt.status:
+        CrabCmd( "crab status -d" )
+
+    elif opt.getoutput:
+        CrabGetOutput()
+
+    else:
+        CrabSubmit( opt )
+
+    
 
 if __name__ == '__main__':
-    sys.exit(submitsample(sys.argv[1:]))
+    main( sys.argv[1:] )
