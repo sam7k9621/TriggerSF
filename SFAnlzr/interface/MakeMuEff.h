@@ -3,7 +3,9 @@
 
 #include "TriggerSF/SFAnlzr/interface/MakeLepEff.h"
 
-class MakeMuEff : public MakeLepEff 
+class MakeMuEff : 
+    public edm::one::EDAnalyzer<edm::one::SharedResources>,
+    public MakeLepEff 
 {
     public:
 

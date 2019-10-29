@@ -1,6 +1,6 @@
 import FWCore.ParameterSet.Config as cms
 import FWCore.ParameterSet.VarParsing as opts
-
+import importlib
 #-------------------------------------------------------------------------------
 #   Options settings + Parsing, see python/optionsInit and python/OptionParser
 #-------------------------------------------------------------------------------
@@ -20,10 +20,22 @@ options.register('useMC',
     'Sample is mc or data')
 
 options.register('lepton',
-    "electron",
+    "el",
     opts.VarParsing.multiplicity.singleton,
     opts.VarParsing.varType.string,
     'Which lepton')
+
+options.register('lumimask',
+    "",
+    opts.VarParsing.multiplicity.singleton,
+    opts.VarParsing.varType.string,
+    )
+
+options.register('year',
+    "",
+    opts.VarParsing.multiplicity.singleton,
+    opts.VarParsing.varType.string,
+    )
 
 options.register('Debug',
      0,
@@ -32,17 +44,16 @@ options.register('Debug',
      'Debugging output level' )
 
 options.setDefault('maxEvents', -1 )
-
 options.parseArguments()
-
-print ">>Running with [ MC sample:{0} | {1} ] \n>>Dataset : {2}".format(options.useMC, options.lepton, options.inputFiles)
 
 #-------------------------------------------------------------------------------
 #   Process Setup
 #-------------------------------------------------------------------------------
-
 process = cms.Process("makeEff")
 process.load("FWCore.MessageService.MessageLogger_cfi")
+mysetting = importlib.import_module('TriggerSF.SFAnlzr.HLT_{}_eff_cfi'.format( options.year ) )
+print ">> Running with [ MC sample:{0} | {1}  | HLT_{2}_eff_cfi ]".format( options.useMC, options.lepton, options.year )
+print ">> Dataset : {0}".format(options.inputFiles)
 
 #-------------------------------------------------------------------------------
 #   Parsing 
@@ -57,36 +68,33 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(options.maxE
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(options.inputFiles)
 )
-print '>>Finished basic setups...'
 
 if not options.useMC :
     import FWCore.PythonUtilities.LumiList as LumiList
-    process.source.lumisToProcess = LumiList.LumiList(filename = '/wk_cms2/sam7k9621/CMSSW_9_4_0_patch1/src/TriggerEfficiency/EfficiencyPlot/test/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt').getVLuminosityBlockRange()
-    print ">>Finished apply lumi mask"
+    process.source.lumisToProcess = LumiList.LumiList(filenmae = options.lumimask ).getVLuminosityBlockRange()
+    print ">> Finished applying lumi mask {}".format( options.lumimask )
 
 #-------------------------------------------------------------------------------
 #   Settings for Analyzer
 #-------------------------------------------------------------------------------
 
-from TriggerEfficiency.EfficiencyPlot.LepAnlzer_cfi import *
-
 if options.lepton == "el":
     process.makeEff = cms.EDAnalyzer(
             "MakeElEff",
-            electrontool,
+            mysetting.eltool,
             useMC = cms.bool(options.useMC),
             pusrc = cms.InputTag("slimmedAddPileupInfo"),
             genevtsrc = cms.InputTag('generator'),
-            filename = cms.FileInPath("TriggerEfficiency/EfficiencyPlot/test/pileupweights_69200.csv")
+            filename = cms.FileInPath("CPVAnalysis/BaseLineSelector/data/pileupweights_{}_69200.csv".format( options.year ) )
             )
 elif options.lepton == "mu":
     process.makeEff = cms.EDAnalyzer(
             "MakeMuEff",
-            muontool,
+            mysetting.mutool,
             useMC = cms.bool(options.useMC),
             pusrc = cms.InputTag("slimmedAddPileupInfo"),
             genevtsrc = cms.InputTag('generator'),
-            filename = cms.FileInPath("TriggerEfficiency/EfficiencyPlot/test/pileupweights_69200.csv")
+            filename = cms.FileInPath("CPVAnalysis/BaseLineSelector/data/pileupweights_{}_69200.csv".format( options.year ) )
             )
 
 process.TFileService = cms.Service("TFileService",

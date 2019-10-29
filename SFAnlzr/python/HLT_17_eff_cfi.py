@@ -28,82 +28,30 @@ eltool = cms.PSet(
    tagtrigger = cms.VPSet(
        cms.PSet(
            ptbin = cms.vdouble(10,20,25,30,35,36,37,38,39,40,41,42,43,44,45,50,51,52,53,54,55,60,70,80,100,150,200,300,400,500,600),
-           etabin = cms.vdouble(-2.5, -2, -1.566, -1.444, -0.8 ,0, 0.8 ,1.444, 1.566, 2, 2.5),
-           HLT = cms.vstring("HLT_Ele32_WPTight_Gsf_v*"),
-           name = cms.string("ele40_v32"),
-           ptcut = cms.double(35),
-           etacut = cms.double(100)
-           ),
-       cms.PSet(
-           ptbin = cms.vdouble(10,20,25,30,35,36,37,38,39,40,41,42,43,44,45,50,51,52,53,54,55,60,70,80,100,150,200,300,400,500,600),
-           etabin = cms.vdouble(-2.5, -2, -1.566, -1.444, -0.8 ,0, 0.8 ,1.444, 1.566, 2, 2.5),
-           HLT = cms.vstring("HLT_Ele32_WPTight_Gsf_v*"),
-           name = cms.string("ele40_v32_pt"),
-           ptcut = cms.double(40),
-           etacut = cms.double(100)
-           ),
-       cms.PSet(
-           ptbin = cms.vdouble(10,20,25,30,35,36,37,38,39,40,41,42,43,44,45,50,51,52,53,54,55,60,70,80,100,150,200,300,400,500,600),
-           etabin = cms.vdouble(-2.5, -2, -1.566, -1.444, -0.8 ,0, 0.8 ,1.444, 1.566, 2, 2.5),
+           etabin = cms.vdouble(-2.5, -2.1, -1.566, -1.444, -0.8 ,0, 0.8 ,1.444, 1.566, 2.1, 2.5),
            HLT = cms.vstring("HLT_Ele35_WPTight_Gsf_v*"),
-           name = cms.string("ele40_v35"),
+           name = cms.string("Ele35"),
            ptcut = cms.double(38),
            etacut = cms.double(100)
            ),
        cms.PSet(
            ptbin = cms.vdouble(10,20,25,30,35,36,37,38,39,40,41,42,43,44,45,50,51,52,53,54,55,60,70,80,100,150,200,300,400,500,600),
-           etabin = cms.vdouble(-2.5, -2, -1.566, -1.444, -0.8 ,0, 0.8 ,1.444, 1.566, 2, 2.5),
+           etabin = cms.vdouble(-2.5, -2.1, -1.566, -1.444, -0.8 ,0, 0.8 ,1.444, 1.566, 2.1, 2.5),
            HLT = cms.vstring("HLT_Ele35_WPTight_Gsf_v*"),
-           name = cms.string("ele40_v35_pt"),
+           name = cms.string("Ele35_pt"),
            ptcut = cms.double(43),
-           etacut = cms.double(100)
-           ),
-       cms.PSet(
-           ptbin = cms.vdouble(10,20,25,30,35,36,37,38,39,40,41,42,43,44,45,50,51,52,53,54,55,60,70,80,100,150,200,300,400,500,600),
-           etabin = cms.vdouble(-2.5, -2, -1.566, -1.444, -0.8 ,0, 0.8 ,1.444, 1.566, 2, 2.5),
-           HLT = cms.vstring("HLT_Ele38_WPTight_Gsf_v*"),
-           name = cms.string("ele40_v38"),
-           ptcut = cms.double(41),
-           etacut = cms.double(100)
-           ),
-       cms.PSet(
-           ptbin = cms.vdouble(10,20,25,30,35,36,37,38,39,40,41,42,43,44,45,50,51,52,53,54,55,60,70,80,100,150,200,300,400,500,600),
-           etabin = cms.vdouble(-2.5, -2, -1.566, -1.444, -0.8 ,0, 0.8 ,1.444, 1.566, 2, 2.5),
-           HLT = cms.vstring("HLT_Ele38_WPTight_Gsf_v*"),
-           name = cms.string("ele40_v38_pt"),
-           ptcut = cms.double(46),
            etacut = cms.double(100)
            )
        ),
    protrigger = cms.VPSet(
        cms.PSet(
-           HLT = cms.vstring("HLT_Ele40_WPTight_Gsf_v*"),
-           ptcut = cms.double(55),
+           HLT = cms.vstring("HLT_Ele35_WPTight_Gsf_v*"),
+           ptcut = cms.double(50),
            etacut = cms.double(100)
            ),
        cms.PSet(
-           HLT = cms.vstring("HLT_Ele40_WPTight_Gsf_v*"),
-           ptcut = cms.double(55),
-           etacut = cms.double(100)
-           ),
-       cms.PSet(
-           HLT = cms.vstring("HLT_Ele40_WPTight_Gsf_v*"),
-           ptcut = cms.double(55),
-           etacut = cms.double(100)
-           ),
-       cms.PSet(
-           HLT = cms.vstring("HLT_Ele40_WPTight_Gsf_v*"),
-           ptcut = cms.double(55),
-           etacut = cms.double(100)
-           ),
-       cms.PSet(
-           HLT = cms.vstring("HLT_Ele40_WPTight_Gsf_v*"),
-           ptcut = cms.double(55),
-           etacut = cms.double(100)
-           ),
-       cms.PSet(
-           HLT = cms.vstring("HLT_Ele40_WPTight_Gsf_v*"),
-           ptcut = cms.double(55),
+           HLT = cms.vstring("HLT_Ele35_WPTight_Gsf_v*"),
+           ptcut = cms.double(50),
            etacut = cms.double(100)
            )
        )

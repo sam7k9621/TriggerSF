@@ -17,11 +17,9 @@ MakeElEff::MakeElEff( const edm::ParameterSet& iConfig ) :
     _useMC( iConfig.getParameter<bool>( "useMC" ) ),
     _puweight( ReadWeight(iConfig.getParameter<edm::FileInPath>("filename").fullPath()) )
 {
-    usesResource( "TFileService" );
-
     vector<double> pt2Dbin  = {20,40,50,55,60,70,80,100,150,200};
     vector<double> eta2Dbin = {-2.5, -2.1, -1.566, -1.444, -0.8, 0, 0.8, 1.444, 1.566, 2.1, 2.5};
-    /*****common setting*****/
+    //[>****common setting****<]
     for( const auto& tagtri : _tagtri ){
         string triname        = tagtri.getParameter<string>( "name" );
         vector<double> etabin = tagtri.getParameter<vector<double> >( "etabin" );
@@ -31,7 +29,7 @@ MakeElEff::MakeElEff( const edm::ParameterSet& iConfig ) :
         AddHist( "pass_elPt_" + triname,    500, 0, 500 );
         AddHist( "fail_elPt_" + triname,    80,  0, 500 );
 
-        Add2DTEff("eff_pt_eta_" + triname, eta2Dbin, pt2Dbin);
+                Add2DTEff("eff_pt_eta_" + triname, eta2Dbin, pt2Dbin);
         AddTEff("eff_pt_"  + triname, ptbin);
         AddTEff("eff_eta_" + triname, etabin);
         AddTEff("eff_pt_"  + triname + "_zmass", ptbin);
@@ -41,6 +39,11 @@ MakeElEff::MakeElEff( const edm::ParameterSet& iConfig ) :
 
 
 MakeElEff::~MakeElEff()
+{
+}
+
+void
+MakeElEff::beginJob()
 {
 }
 
@@ -73,9 +76,7 @@ MakeElEff::analyze( const edm::Event& iEvent, const edm::EventSetup& iSetup )
     double zmass = ( tagLV + proLV ).M();
     double elpt  = pro.pt();
     for( int i = 0; i < (int)_tagtri.size(); i++ ){
-        //[>***common setting***<]
         string triname = _tagtri[ i ].getParameter<string>( "name" );
-        //[>***setting for tag***<]
         vector<string> hltlist = _tagtri[ i ].getParameter<vector<string> >( "HLT" );
         double ptcut           = _tagtri[ i ].getParameter<double>( "ptcut" );
         double etacut          = _tagtri[ i ].getParameter<double>( "etacut" );
@@ -87,11 +88,12 @@ MakeElEff::analyze( const edm::Event& iEvent, const edm::EventSetup& iSetup )
             }
         }
 
+        cout<<i<<"aaaaa"<<endl;
         if( !passtag ){
             continue;
         }
+        cout<<i<<"bb"<<endl;
 
-        //[>***setting for probe***<]
         hltlist = _protri[ i ].getParameter<vector<string> >( "HLT" );
         ptcut   = _protri[ i ].getParameter<double>( "ptcut" );
         etacut  = _protri[ i ].getParameter<double>( "etacut" );
@@ -160,10 +162,6 @@ MakeElEff::analyze( const edm::Event& iEvent, const edm::EventSetup& iSetup )
 }
 
 
-void
-MakeElEff::beginJob()
-{
-}
 
 void
 MakeElEff::endJob()

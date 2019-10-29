@@ -20,8 +20,16 @@
 #include "TH2.h"
 #include "TEfficiency.h"
 
+struct nop
+{
+    template <typename T>
+    void operator() (T const &) const noexcept { }
+};
 
-class MakeLepEff : public edm::one::EDAnalyzer<edm::one::SharedResources>
+template <typename T>
+using nop_unique_ptr = std::unique_ptr<T, nop>;
+
+class MakeLepEff
 {
     public:
 
@@ -70,12 +78,12 @@ class MakeLepEff : public edm::one::EDAnalyzer<edm::one::SharedResources>
 
         /******************************************************************************************************/
         virtual std::vector<double> ReadWeight(const std::string& filename) final ;
+        edm::Service<TFileService> fs;
     
     private:
 
-        edm::Service<TFileService> _fs;
-        mgr::RootObjMgr<TEfficiency> _teffmgr;
-        mgr::RootObjMgr<TH1D>        _histmgr;
-        mgr::RootObjMgr<TH2D>        _hist2Dmgr;
+        mgr::RootObjMgr<TEfficiency, nop_unique_ptr<TEfficiency>> _teffmgr;
+        mgr::RootObjMgr<TH1D, nop_unique_ptr<TH1D>>        _histmgr;
+        mgr::RootObjMgr<TH2D, nop_unique_ptr<TH2D>>        _hist2Dmgr;
 };
 #endif

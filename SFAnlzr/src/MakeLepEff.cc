@@ -12,7 +12,7 @@ MakeLepEff::AddHist(
         const double& x_upper
         )
 {
-    TH1D* h = _fs->make<TH1D>( 
+    TH1D* h = fs->make<TH1D>( 
             title.c_str(),
             title.c_str(),
             bin_size,
@@ -26,7 +26,7 @@ MakeLepEff::AddHist(
 void
 MakeLepEff::AddHist( const string& title, const vector<double>& lst )
 {
-    TH1D* h = _fs->make<TH1D>( 
+    TH1D* h = fs->make<TH1D>( 
             title.c_str(),
             title.c_str(),
             lst.size() - 1,
@@ -49,7 +49,7 @@ MakeLepEff::Add2DHist(
         const vector<double>& ylst
         )
 {
-    TH2D* h = _fs->make<TH2D>( 
+    TH2D* h = fs->make<TH2D>( 
             title.c_str(), 
             title.c_str(), 
             xlst.size()-1, 
@@ -74,7 +74,7 @@ MakeLepEff::Add2DTEff(
         const vector<double>& ylst
         )
 {
-    TEfficiency* h = _fs->make<TEfficiency>( 
+    TEfficiency* h = fs->make<TEfficiency>( 
             title.c_str(), 
             title.c_str(), 
             xlst.size()-1, 
@@ -92,7 +92,7 @@ MakeLepEff::AddTEff(
         const vector<double>& xlst
         )
 {
-    TEfficiency* h = _fs->make<TEfficiency>( 
+    TEfficiency* h = fs->make<TEfficiency>( 
             title.c_str(), 
             title.c_str(), 
             xlst.size()-1, 
