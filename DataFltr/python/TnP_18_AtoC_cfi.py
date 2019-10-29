@@ -24,7 +24,7 @@ electrontool = cms.PSet(
         triggerCache = cms.VPSet(
             cms.PSet(
                 HLTName = cms.string("HLT_Ele32_WPTight_Gsf_v*"),
-                FilterName = cms.string("hltEle32noerWPTightGsfTrackIsoFilter")
+                FilterName = cms.string("hltEle32WPTightGsfTrackIsoFilter")
             )
         ),
 

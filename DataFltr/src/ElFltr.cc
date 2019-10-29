@@ -35,10 +35,8 @@ ElFltr::passTrigger( pat::Electron& el, const edm::Event& iEvent )
         string name  = _trigger[ i ].getParameter<string>( "HLTName" );
         string label = _trigger[ i ].getParameter<string>( "FilterName" );
         
-        cout<<i<<" name"<<endl;
         if( delR( el, iEvent, label ) < 0.1 ){
             el.addUserInt( name, 1 );
-            cout<<"aaaaaaaaa"<<endl;
         }
     }
 }
