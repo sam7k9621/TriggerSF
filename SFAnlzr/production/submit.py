@@ -26,10 +26,10 @@ def SubmitSample( samplelst, inputlst, inputpath, outfile, per, useMC, year, ent
     for idx, s in enumerate( samplelst ):
         inputlst[ idx/per ].write( "file:" + inputpath + s + "\n" )
 
-    print len(samplelst)
+    print "Total files:", len(samplelst) 
     for idx, f in enumerate( inputlst ):
         f.close()
-        with open( ".sentJob{}.sh".format(str(idx)), "w" ) as outputfile:
+        with open( ".sentJob.sh", "w" ) as outputfile:
             outputfile.write( qsub.format(
                 CMSSW_BASE,
                 f.name,
@@ -39,9 +39,9 @@ def SubmitSample( samplelst, inputlst, inputpath, outfile, per, useMC, year, ent
                 entry
                 ) )
         cmd = "qsub .sentJob.sh -N {}_{}".format( outfile, str(idx) )
-        print ">>Processing ", cmd
-        # os.system(cmd)
-        # os.system("rm .sentJob.sh")
+        print ">> Processing {}_{}".format( outfile, str(idx) )
+        os.system(cmd)
+        os.system("rm .sentJob.sh")
 
 
 def GetInputlst(num, per, outfile):
@@ -81,17 +81,20 @@ def main(args):
         tag = dir.split("_")[2]
         for output in outputlst :
             
+            inputpath = "{}{}{}/{}/results/".format(CMSSW_BASE, inputdir, dir, output )
+            s = subprocess.Popen( 'ls {}'.format(inputpath), shell=True, stdout=subprocess.PIPE )
+            samplelst, err = s.communicate()
+            samplelst = filter( lambda x: ".root" in x, samplelst.split('\n') )
+            
+            if not samplelst:
+                continue
+
             if "Run" not in output: #MC
                 per = 30
 
                 outfile = output.split("_")
                 outfile = opt.tag + tag + '_' + outfile[2] + "_" + outfile[5]
-                inputpath = "{}{}{}/{}/results/".format(CMSSW_BASE, inputdir, dir, output )
-                s = subprocess.Popen( 'ls {}'.format(inputpath), shell=True, stdout=subprocess.PIPE )
-                samplelst, err = s.communicate()
-                samplelst = filter( lambda x: ".root" in x, samplelst.split('\n') )
                 inputlst  = GetInputlst( len(samplelst), per, outfile )
-                
                 SubmitSample( samplelst, inputlst, inputpath, outfile, per, True, tag ) 
 
             else: #Data
@@ -100,12 +103,7 @@ def main(args):
                 
                 outfile = output.split("_")
                 outfile = opt.tag + tag + "_" + outfile[2] + "_" + outfile[3] + "_" + outfile[5]
-                inputpath = "{}{}{}/{}/results/".format(CMSSW_BASE, inputdir, dir, output )
-                s = subprocess.Popen( 'ls {}'.format(inputpath), shell=True, stdout=subprocess.PIPE )
-                samplelst, err = s.communicate()
-                samplelst = filter( lambda x: ".root" in x, samplelst.split('\n') )
                 inputlst  = GetInputlst( len(samplelst), per, outfile )
-                
                 SubmitSample( samplelst, inputlst, inputpath, outfile, per, False, tag, lumimask ) 
 
 if __name__ == '__main__':

@@ -17,8 +17,8 @@ MakeElEff::MakeElEff( const edm::ParameterSet& iConfig ) :
     _useMC( iConfig.getParameter<bool>( "useMC" ) ),
     _puweight( ReadWeight(iConfig.getParameter<edm::FileInPath>("filename").fullPath()) )
 {
-    vector<double> pt2Dbin  = {20,40,50,55,60,70,80,100,150,200};
-    vector<double> eta2Dbin = {-2.5, -2.1, -1.566, -1.444, -0.8, 0, 0.8, 1.444, 1.566, 2.1, 2.5};
+    vector<double> pt2Dbin  = {20, 30, 35, 40, 50, 60, 70, 80, 100, 150, 200, 500};
+    vector<double> eta2Dbin = {-2.5, -2, -1.566, -1.444, -0.8, 0, 0.8, 1.444, 1.566, 2, 2.5};
     //[>****common setting****<]
     for( const auto& tagtri : _tagtri ){
         string triname        = tagtri.getParameter<string>( "name" );
@@ -88,11 +88,9 @@ MakeElEff::analyze( const edm::Event& iEvent, const edm::EventSetup& iSetup )
             }
         }
 
-        cout<<i<<"aaaaa"<<endl;
         if( !passtag ){
             continue;
         }
-        cout<<i<<"bb"<<endl;
 
         hltlist = _protri[ i ].getParameter<vector<string> >( "HLT" );
         ptcut   = _protri[ i ].getParameter<double>( "ptcut" );

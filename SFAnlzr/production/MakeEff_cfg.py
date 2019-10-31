@@ -71,12 +71,12 @@ process.source = cms.Source("PoolSource",
 
 if not options.useMC :
     import FWCore.PythonUtilities.LumiList as LumiList
-    process.source.lumisToProcess = LumiList.LumiList(filenmae = options.lumimask ).getVLuminosityBlockRange()
+    process.source.lumisToProcess = LumiList.LumiList(filename = options.lumimask ).getVLuminosityBlockRange()
     print ">> Finished applying lumi mask {}".format( options.lumimask )
 
 #-------------------------------------------------------------------------------
 #   Settings for Analyzer
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 
 if options.lepton == "el":
     process.makeEff = cms.EDAnalyzer(

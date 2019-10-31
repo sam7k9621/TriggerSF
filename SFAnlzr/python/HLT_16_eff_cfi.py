@@ -27,16 +27,16 @@ eltool = cms.PSet(
    probe = cms.InputTag('datafltr','Probe'),
    tagtrigger = cms.VPSet(
        cms.PSet(
-           ptbin = cms.vdouble(10,20,25,30,35,36,37,38,39,40,41,42,43,44,45,50,51,52,53,54,55,60,70,80,100,150,200,300,400,500,600),
-           etabin = cms.vdouble(-2.5, -2.1, -1.566, -1.444, -0.8 ,0, 0.8 ,1.444, 1.566, 2.1, 2.5),
+           ptbin = cms.vdouble(10,20,25,30,35,36,37,38,39,40,41,42,43,44,45,50,60,70,80,100,150,200,600),
+           etabin = cms.vdouble(-2.5, -2, -1.566, -1.444, -0.8 ,0, 0.8 ,1.444, 1.566, 2, 2.5),
            HLT = cms.vstring("HLT_Ele32_eta2p1_WPTight_Gsf_v*"),
            name = cms.string("Ele32"),
            ptcut = cms.double(35),
            etacut = cms.double(2.1)
            ),
        cms.PSet(
-           ptbin = cms.vdouble(10,20,25,30,35,36,37,38,39,40,41,42,43,44,45,50,51,52,53,54,55,60,70,80,100,150,200,300,400,500,600),
-           etabin = cms.vdouble(-2.5, -2.1, -1.566, -1.444, -0.8 ,0, 0.8 ,1.444, 1.566, 2.1, 2.5),
+           ptbin = cms.vdouble(10,20,25,30,35,36,37,38,39,40,41,42,43,44,45,50,60,70,80,100,150,200,600),
+           etabin = cms.vdouble(-2.5, -2, -1.566, -1.444, -0.8 ,0, 0.8 ,1.444, 1.566, 2, 2.5),
            HLT = cms.vstring("HLT_Ele32_eta2p1_WPTight_Gsf_v*"),
            name = cms.string("Ele32_pt"),
            ptcut = cms.double(40),
