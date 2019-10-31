@@ -21,5 +21,5 @@ config.Data.inputDataset  = '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8
 config.Data.inputDBS      = 'global'
 config.Data.splitting     = 'FileBased'
 config.Data.unitsPerJob   = 10
-config.Data.outLFNDirBase = '/store/user/pusheng/HLTSF_2019_Oct_29_1312'
+config.Data.outLFNDirBase = '/store/user/pusheng/HLTSF_2019_Oct_29_1609'
 config.Site.storageSite = 'T2_TW_NCHC'

@@ -21,5 +21,5 @@ config.Data.inputDataset  = '/EGamma/Run2018A-17Sep2018-v2/MINIAOD'
 config.Data.inputDBS      = 'global'
 config.Data.splitting     = 'LumiBased'
 config.Data.unitsPerJob   = 50
-config.Data.outLFNDirBase = '/store/user/pusheng/HLTSF_2019_Oct_29_1313'
+config.Data.outLFNDirBase = '/store/user/pusheng/HLTSF_2019_Oct_29_1609'
 config.Site.storageSite = 'T2_TW_NCHC'
