@@ -43,10 +43,7 @@ import math
 import multiprocessing
 import TriggerSF.DataFltr.MakeName as nametool
 
-def CrabCmd( cmd ):
-    s = subprocess.Popen( 'ls', shell=True, stdout=subprocess.PIPE )
-    dirlst, err = s.communicate()
-    dirlst = filter( lambda x: "crab_config" in x, dirlst.split('\n') )     
+def CrabCmd( cmd, dirlst ):
 
     for dir in dirlst:
         s = subprocess.Popen( 'ls {}'.format( dir ), shell=True, stdout=subprocess.PIPE )
@@ -67,11 +64,7 @@ def DivideJob( total ):
         lst.append( (head, tail) )
     return lst
 
-def CrabGetOutput():
-    s = subprocess.Popen( 'ls', shell=True, stdout=subprocess.PIPE )
-    dirlst, err = s.communicate()
-    dirlst = filter( lambda x: "crab_config" in x, dirlst.split('\n') )     
-
+def CrabGetOutput( dirlst ):
     def cmdfunc( dir, output, head, tail ):
         os.system( "crab getoutput -d {}/{} --jobids={}-{}".format(dir, output, head, tail) )
 
@@ -137,6 +130,7 @@ def main(argv):
     parser.add_argument('-d', '--directory'   , help='the storage lfn dir' , type=str, default=time.strftime("/store/user/pusheng/HLTSF_%Y_%b_%d_%H%M" ) ) 
     parser.add_argument('-l', '--lepton'      , help='which lepton using'  , type=str, default=None)
     parser.add_argument('-n', '--jobnumber'   , help='unitsPerJob'         , type=str, default='2')
+    parser.add_argument('-c', '--config'      , help='configfile'          , type=str, nargs='+')
     parser.add_argument('-m', '--useMC'       , action='store_true')
     parser.add_argument('-t', '--dryrun'      , action='store_true')
     parser.add_argument('-f', '--force'       , action='store_true')
@@ -152,19 +146,22 @@ def main(argv):
         parser.print_help()
         raise
 
-    if opt.resubmit:
-        CrabCmd( "crab resubmit -d" )
 
-    elif opt.status:
-        CrabCmd( "crab status -d" )
-
-    elif opt.getoutput:
-        CrabGetOutput()
-
-    else:
+    if opt.submit:
         CrabSubmit( opt )
 
-    
+    else:
+        if not opt.config:
+            s = subprocess.Popen( 'ls', shell=True, stdout=subprocess.PIPE )
+            dirlst, err = s.communicate()
+            opt.config = filter( lambda x: "crab_config" in x, dirlst.split('\n') )     
+
+        if opt.resubmit:
+            CrabCmd( "crab resubmit -d", opt.config )
+        elif opt.status:
+            CrabCmd( "crab status -d", opt.config )
+        elif opt.getoutput:
+            CrabGetOutput( opt.config )
 
 if __name__ == '__main__':
     main( sys.argv[1:] )

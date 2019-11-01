@@ -42,8 +42,8 @@ def main(args):
         with open('temp.txt', 'w') as outfile:
             json.dump(output, outfile)
         
-        os.system( "brilcalc lumi -i temp.txt --normtag /cvmfs/cms-bril.cern.ch/cms-lumi-pog/Normtags/normtag_PHYSICS.json" )
-        os.system( "rm .temp.txt" )
+        os.system( "brilcalc lumi -i temp.txt --normtag /cvmfs/cms-bril.cern.ch/cms-lumi-pog/Normtags/normtag_PHYSICS.json -u /fb" )
+        os.system( "rm temp.txt" )
 
 if __name__ == '__main__':
     main(sys.argv)
