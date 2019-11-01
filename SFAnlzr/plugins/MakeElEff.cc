@@ -17,7 +17,7 @@ MakeElEff::MakeElEff( const edm::ParameterSet& iConfig ) :
     _useMC( iConfig.getParameter<bool>( "useMC" ) ),
     _puweight( ReadWeight(iConfig.getParameter<edm::FileInPath>("filename").fullPath()) )
 {
-    vector<double> pt2Dbin  = {20, 30, 35, 40, 50, 60, 70, 80, 100, 150, 200, 500};
+    vector<double> pt2Dbin  = {20, 30, 35, 40, 50, 60, 70, 80, 100, 150, 200, 600};
     vector<double> eta2Dbin = {-2.5, -2, -1.566, -1.444, -0.8, 0, 0.8, 1.444, 1.566, 2, 2.5};
     //[>****common setting****<]
     for( const auto& tagtri : _tagtri ){
