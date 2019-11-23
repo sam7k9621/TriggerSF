@@ -13,7 +13,6 @@ def SetHist( hist, width=2, color=1, marker=1, size=1 ):
     hist.SetMarkerSize( size )
     hist.SetMarkerStyle( marker )
 
-
 def MakeSampleName( sample ):
     lst = sample.split("_")
     return "{}-{}_{}".format( lst[1], lst[2], lst[-1])
@@ -196,6 +195,31 @@ opt.Parsing()
 histmgr = pltmgr.Plotmgr()
 objlst  = getattr( mysetting, "objlst_{}".format( opt.Year() ) )
 
+def Plot2DSF( obj ):
+    datalst  = getattr( mysetting, "datalst_{}".format( opt.Year() ) )
+    mcsample = getattr( mysetting, "mc_{}"  .format( opt.Year() ) )
+    hlt      = getattr( mysetting, "HLT_{}".format( opt.Year() ) )  
+    mc    = histmgr.GetMergedObj( mcsample, operator.contains )
+    
+    for era in datalst:
+        data  = histmgr.GetMergedObj( era[0], operator.contains )
+        scale, scale_err = pltmgr.Divide2DTeff( data, mc )
+
+        c = pltmgr.NewCanvas()
+        scale.Draw( "COLZ text" )
+        scale.SetStats( False )
+        scale.SetTitle( hlt )
+        scale.GetYaxis().SetTitle( "P_{T} [GeV]" )
+        scale.GetXaxis().SetTitle( "SuperCluster #eta" )
+        c.SaveAs( "results/Eff{}_{}_{}_{}.pdf".format( opt.Year(), era[0], mcsample, obj ) ) 
+    
+        scale_err.Draw( "COLZ text" )
+        scale_err.SetStats( False )
+        scale_err.SetTitle( hlt )
+        scale_err.GetYaxis().SetTitle( "P_{T} [GeV]" )
+        scale_err.GetXaxis().SetTitle( "SuperCluster #eta" )
+        c.SaveAs( "results/Eff{}_{}_{}_err_{}.pdf".format( opt.Year(), era[0], mcsample, obj ) ) 
+
 def main() :
     s = subprocess.Popen( 'ls results/TnP{}*'.format( opt.Year() ), shell=True, stdout=subprocess.PIPE )
     samplelst, err = s.communicate()
@@ -209,8 +233,10 @@ def main() :
     PlotEtaEff( "eta_shift" )
     PlotPtEff ( "pt_zmass" )
     PlotEtaEff( "eta_zmass" )
+    Plot2DSF( "eff_pt_eta_Ele32" )
     CheckFist( "pass_zmass" )
     CheckFist( "fail_zmass" )
+
 
 if __name__ == '__main__':
     main()

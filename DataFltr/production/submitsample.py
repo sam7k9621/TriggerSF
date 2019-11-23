@@ -64,11 +64,11 @@ def DivideJob( total ):
         lst.append( (head, tail) )
     return lst
 
-def CrabGetOutput( dirlst ):
+def CrabGetOutput( opt ):
     def cmdfunc( dir, output, head, tail ):
         os.system( "crab getoutput -d {}/{} --jobids={}-{}".format(dir, output, head, tail) )
 
-    for dir in dirlst:
+    for dir in opt.config:
         s = subprocess.Popen( 'ls {}'.format( dir ), shell=True, stdout=subprocess.PIPE )
         outputlst, err = s.communicate()
         outputlst = filter( lambda x: "crab_TnP" in x, outputlst.split('\n') )
@@ -81,8 +81,8 @@ def CrabGetOutput( dirlst ):
             s = subprocess.Popen( 'crab status -d {}/{} | grep "finished"'.format( dir, output ), shell=True, stdout=subprocess.PIPE )
             joblst, err = s.communicate()
             joblst = map(int, filter( lambda x: x.isdigit(), re.split( '\t|%|\(|\)|\/', joblst ) ) )
-            if joblst[0] == joblst[1]:
-                for jobid in DivideJob( joblst[0] ):
+            if joblst[0] == joblst[1] or opt.force:
+                for jobid in DivideJob( joblst[1] ):
                     print "\033[1m\033[31m{}/{} {}-{} submitted\033[0m".format( dir, output, jobid[0], jobid[1] )
                     proc = multiprocessing.Process( target = cmdfunc, args = (dir, output, jobid[0], jobid[1]) )
                     proc.start()
@@ -122,7 +122,6 @@ def CrabSubmit( opt ):
             os.system('crab submit -c ' + filename )
 
 def main(argv):
-
     parser = argparse.ArgumentParser(description='Process to sending crab for TnP')
     parser.add_argument('-i', '--inputdataset', help='which dataset to run', type=str, default=None)
     parser.add_argument('-s', '--site'        , help='which site to store' , type=str, default='T2_TW_NCHC')
@@ -161,7 +160,7 @@ def main(argv):
         elif opt.status:
             CrabCmd( "crab status -d", opt.config )
         elif opt.getoutput:
-            CrabGetOutput( opt.config )
+            CrabGetOutput( opt )
 
 if __name__ == '__main__':
     main( sys.argv[1:] )

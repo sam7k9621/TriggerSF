@@ -19,7 +19,6 @@ MakeElEff::MakeElEff( const edm::ParameterSet& iConfig ) :
 {
     vector<double> pt2Dbin  = {20, 30, 35, 40, 50, 60, 70, 80, 100, 150, 200, 600};
     vector<double> eta2Dbin = {-2.5, -2, -1.566, -1.444, -0.8, 0, 0.8, 1.444, 1.566, 2, 2.5};
-    //[>****common setting****<]
     for( const auto& tagtri : _tagtri ){
         string triname        = tagtri.getParameter<string>( "name" );
         vector<double> etabin = tagtri.getParameter<vector<double> >( "etabin" );
@@ -29,7 +28,7 @@ MakeElEff::MakeElEff( const edm::ParameterSet& iConfig ) :
         AddHist( "pass_elPt_" + triname,    500, 0, 500 );
         AddHist( "fail_elPt_" + triname,    80,  0, 500 );
 
-                Add2DTEff("eff_pt_eta_" + triname, eta2Dbin, pt2Dbin);
+        Add2DTEff("eff_pt_eta_" + triname, eta2Dbin, pt2Dbin);
         AddTEff("eff_pt_"  + triname, ptbin);
         AddTEff("eff_eta_" + triname, etabin);
         AddTEff("eff_pt_"  + triname + "_zmass", ptbin);

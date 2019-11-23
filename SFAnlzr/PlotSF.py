@@ -134,7 +134,7 @@ def GetObj( file, objname ):
 def main():
 
 
-    file = ROOT.TFile.Open( "results/Eff{0}_Run20{0}_FXFX.root".format( opt.Year() ), 'read' )
+    file = ROOT.TFile.Open( "results/Eff{0}_Run20{0}_MLM.root".format( opt.Year() ), 'read' )
     nom_pt   = GetObj( file, "pt" )
     unc1_pt  = GetObj( file, "pt_shift" )
     unc2_pt  = GetObj( file, "pt_zmass" )
@@ -143,7 +143,7 @@ def main():
     unc2_eta = GetObj( file, "eta_zmass" )
     file.Close()
 
-    file = ROOT.TFile.Open( "results/Eff{0}_Run20{0}_MLM.root".format( opt.Year() ), 'read' )
+    file = ROOT.TFile.Open( "results/Eff{0}_Run20{0}_FXFX.root".format( opt.Year() ), 'read' )
     unc3_pt  = GetObj( file, "pt" )
     unc3_eta = GetObj( file, "eta" )
     file.Close()
