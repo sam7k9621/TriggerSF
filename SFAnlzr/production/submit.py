@@ -109,9 +109,10 @@ def main(args):
 
     if opt.submit:
         file = " ".join( filelst )
-        cmd     = "nohup {}/src/CPVAnalysis/SentQJob.py -r 10 -q 5 -i {} > cmsRun.out &".format( CMSSW_BASE, file )
+        # cmd     = "nohup {}/src/CPVAnalysis/SentQJob.py -r 10 -q 5 -i {} > cmsRun.out &".format( CMSSW_BASE, file )
+        cmd     = "{}/src/CPVAnalysis/SentQJob.py -r 10 -q 5 -i {}".format( CMSSW_BASE, file )
         os.system( cmd )
-        print "DONE"
+        # print "DONE"
 
 if __name__ == '__main__':
     main(sys.argv)
