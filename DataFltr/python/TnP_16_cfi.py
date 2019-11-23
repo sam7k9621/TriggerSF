@@ -23,8 +23,8 @@ electrontool = cms.PSet(
         #trigger we used
         triggerCache = cms.VPSet(
             cms.PSet(
-                HLTName = cms.string("HLT_Ele32_eta2p1_WPTight_Gsf_v*"),
-                FilterName = cms.string('hltEle32WPTightGsfTrackIsoFilter')
+                HLTName = cms.string("HLT_Ele27_WPTight_Gsf_v*"),
+                FilterName = cms.string('hltEle27WPTightGsfTrackIsoFilter')
             )
         ),
 
@@ -43,10 +43,10 @@ electrontool = cms.PSet(
         eleHEEPIdMap           = cms.string('heepElectronID-HEEPV70'),
 
         #customized cut
-        tagPtMin = cms.double(35),
-        tagEtaMax = cms.double(2.1),
+        tagPtMin = cms.double(30),
+        tagEtaMax = cms.double(2.5),
         probePtMin = cms.double(8),
-        probeEtaMax = cms.double(2.1)
+        probeEtaMax = cms.double(2.5)
        )
 
 muontool = cms.PSet(

@@ -1,19 +1,19 @@
 ## 2016
-#./submitsample.py -l el -y 16 -i /DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext2-v2/MINIAODSIM  -m -n 10 -r   
-#./submitsample.py -l el -y 16 -i /DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext2-v1/MINIAODSIM -m -n 10 -r  
+./submitsample.py -l el -y 16 -i /DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext2-v2/MINIAODSIM  -m -n 10 -r   
+./submitsample.py -l el -y 16 -i /DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext2-v1/MINIAODSIM -m -n 10 -r  
 
-#./submitsample.py -l el -y 16 -i /SingleElectron/Run2016B-17Jul2018_ver2-v1/MINIAOD -n 50 -r
-#./submitsample.py -l el -y 16 -i /SingleElectron/Run2016C-17Jul2018-v1/MINIAOD      -n 50 -r
-#./submitsample.py -l el -y 16 -i /SingleElectron/Run2016D-17Jul2018-v1/MINIAOD      -n 50 -r
-#./submitsample.py -l el -y 16 -i /SingleElectron/Run2016E-17Jul2018-v1/MINIAOD      -n 50 -r
-#./submitsample.py -l el -y 16 -i /SingleElectron/Run2016F-17Jul2018-v1/MINIAOD      -n 50 -r
-#./submitsample.py -l el -y 16 -i /SingleElectron/Run2016G-17Jul2018-v1/MINIAOD      -n 50 -r
-#./submitsample.py -l el -y 16 -i /SingleElectron/Run2016H-17Jul2018-v1/MINIAOD      -n 50 -r
+./submitsample.py -l el -y 16 -i /SingleElectron/Run2016B-17Jul2018_ver2-v1/MINIAOD -n 50 -r
+./submitsample.py -l el -y 16 -i /SingleElectron/Run2016C-17Jul2018-v1/MINIAOD      -n 50 -r
+./submitsample.py -l el -y 16 -i /SingleElectron/Run2016D-17Jul2018-v1/MINIAOD      -n 50 -r
+./submitsample.py -l el -y 16 -i /SingleElectron/Run2016E-17Jul2018-v1/MINIAOD      -n 50 -r
+./submitsample.py -l el -y 16 -i /SingleElectron/Run2016F-17Jul2018-v1/MINIAOD      -n 50 -r
+./submitsample.py -l el -y 16 -i /SingleElectron/Run2016G-17Jul2018-v1/MINIAOD      -n 50 -r
+./submitsample.py -l el -y 16 -i /SingleElectron/Run2016H-17Jul2018-v1/MINIAOD      -n 50 -r
 
 ## 2017 
 #./submitsample.py -l el -y 17 -i /DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM      -m -n 10 -r 
-./submitsample.py -l el -y 17 -i /DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM       -m -n 10 -r 
-./submitsample.py -l el -y 17 -i /DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017RECOSIMstep_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM        -m -n 10 -r 
+#./submitsample.py -l el -y 17 -i /DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM       -m -n 10 -r 
+#./submitsample.py -l el -y 17 -i /DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017RECOSIMstep_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM        -m -n 10 -r 
 #./submitsample.py -l el -y 17 -i /DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017RECOSIMstep_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM -m -n 10 -r
 
 #./submitsample.py -l el -y 17 -i /SingleElectron/Run2017B-31Mar2018-v1/MINIAOD -n 50 -r
