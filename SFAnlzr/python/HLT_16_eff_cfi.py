@@ -27,32 +27,32 @@ eltool = cms.PSet(
    probe = cms.InputTag('datafltr','Probe'),
    tagtrigger = cms.VPSet(
        cms.PSet(
-           ptbin = cms.vdouble(10,20,25,30,35,36,37,38,39,40,41,42,43,44,45,50,60,70,80,100,150,200,600),
+           ptbin = cms.vdouble(10,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,45,50,60,70,80,100,150,200,600),
            etabin = cms.vdouble(-2.5, -2, -1.566, -1.444, -0.8 ,0, 0.8 ,1.444, 1.566, 2, 2.5),
-           HLT = cms.vstring("HLT_Ele32_eta2p1_WPTight_Gsf_v*"),
-           name = cms.string("Ele32"),
-           ptcut = cms.double(35),
+           HLT = cms.vstring("HLT_Ele27_WPTight_Gsf_v*"),
+           name = cms.string("Ele27"),
+           ptcut = cms.double(30),
            etacut = cms.double(2.1)
            ),
        cms.PSet(
-           ptbin = cms.vdouble(10,20,25,30,35,36,37,38,39,40,41,42,43,44,45,50,60,70,80,100,150,200,600),
+           ptbin = cms.vdouble(10,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,45,50,60,70,80,100,150,200,600),
            etabin = cms.vdouble(-2.5, -2, -1.566, -1.444, -0.8 ,0, 0.8 ,1.444, 1.566, 2, 2.5),
-           HLT = cms.vstring("HLT_Ele32_eta2p1_WPTight_Gsf_v*"),
-           name = cms.string("Ele32_pt"),
-           ptcut = cms.double(40),
+           HLT = cms.vstring("HLT_Ele27_WPTight_Gsf_v*"),
+           name = cms.string("Ele27_pt"),
+           ptcut = cms.double(35),
            etacut = cms.double(2.1)
            )
        ),
    protrigger = cms.VPSet(
        cms.PSet(
-           HLT = cms.vstring("HLT_Ele32_eta2p1_WPTight_Gsf_v*"),
+           HLT = cms.vstring("HLT_Ele27_WPTight_Gsf_v*"),
            ptcut = cms.double(50),
-           etacut = cms.double(2.1)
+           etacut = cms.double(100)
            ),
        cms.PSet(
-           HLT = cms.vstring("HLT_Ele32_eta2p1_WPTight_Gsf_v*"),
+           HLT = cms.vstring("HLT_Ele27_WPTight_Gsf_v*"),
            ptcut = cms.double(50),
-           etacut = cms.double(2.1)
+           etacut = cms.double(100)
            )
        )
 )

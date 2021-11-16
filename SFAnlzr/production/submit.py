@@ -58,23 +58,23 @@ def main(args):
             "Options to decide to use which HLT menu version"
             )
 
-    parser.add_argument(
-            '-s', '--submit',
-            action='store_true'
-            )
+    parser.add_argument( '-s', '--submit', action='store_true' )
+
+    parser.add_argument( '-i', '--input', type=str, nargs='+' )
     try:
         opt = parser.parse_args(args[1:])
     except:
         print "Error processing arguments!"
         parser.print_help()
         raise
+ 
+    if not opt.input:
+        s = subprocess.Popen( 'ls {}'.format(CMSSW_BASE+inputdir), shell=True, stdout=subprocess.PIPE )
+        dirlst, err = s.communicate() 
+        opt.input = filter( lambda x: "crab_config" in x, dirlst.split('\n') )
 
-    s = subprocess.Popen( 'ls {}'.format(CMSSW_BASE+inputdir), shell=True, stdout=subprocess.PIPE )
-    dirlst, err = s.communicate() 
-    dirlst = filter( lambda x: "crab_config" in x, dirlst.split('\n') )
-    
     filelst = []
-    for dir in dirlst:
+    for dir in opt.input:
         s = subprocess.Popen( 'ls {}'.format(CMSSW_BASE+inputdir+dir), shell=True, stdout=subprocess.PIPE )
         outputlst, err = s.communicate()
         outputlst = filter( lambda x: "crab_TnP" in x, outputlst.split('\n') ) 
@@ -109,8 +109,7 @@ def main(args):
 
     if opt.submit:
         file = " ".join( filelst )
-        # cmd     = "nohup {}/src/CPVAnalysis/SentQJob.py -r 10 -q 5 -i {} > cmsRun.out &".format( CMSSW_BASE, file )
-        cmd     = "{}/src/CPVAnalysis/SentQJob.py -r 10 -q 5 -i {}".format( CMSSW_BASE, file )
+        cmd     = "nohup {}/src/CPVAnalysis/SentQJob.py -r 15 -q 5 -i {} > cmsRun.out &".format( CMSSW_BASE, file )
         os.system( cmd )
         # print "DONE"
 

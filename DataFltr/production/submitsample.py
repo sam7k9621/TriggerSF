@@ -7,7 +7,7 @@
  #
 #*******************************************************************************
 crabcfgformat="""
-from CRABClient.UserUtilities import config, getUsernameFromSiteDB
+from CRABClient.UserUtilities import config
 config = config()
 config.General.requestName = '{0}'
 config.General.workArea = '{1}'

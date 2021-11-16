@@ -218,7 +218,8 @@ def Plot2DSF( obj ):
         scale_err.SetTitle( hlt )
         scale_err.GetYaxis().SetTitle( "P_{T} [GeV]" )
         scale_err.GetXaxis().SetTitle( "SuperCluster #eta" )
-        c.SaveAs( "results/Eff{}_{}_{}_err_{}.pdf".format( opt.Year(), era[0], mcsample, obj ) ) 
+        c.SaveAs( "results/Eff{}_{}_{}_err_{}.pdf".format( opt.Year(), era[0], mcsample, obj ) )
+        pltmgr.SaveToROOT( scale, "results/HLT_SF_{}.root".format( opt.Year() ), "abseta_pt_ratio" )
 
 def main() :
     s = subprocess.Popen( 'ls results/TnP{}*'.format( opt.Year() ), shell=True, stdout=subprocess.PIPE )
